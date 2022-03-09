@@ -7,6 +7,7 @@ const AuthStack = ()=>{
     <Stack.Navigator initialRouteName={'Login'}>
     {/*here is Login, Register screen...*/}
       <Stack.Screen name={'Login'} component={Login}/>
+      {/*<Stack.Screen name={'Register'} component={}/>*/}
     </Stack.Navigator>
   )
 }

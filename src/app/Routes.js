@@ -6,7 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import HomeStack from "./home/HomeStack";
 import AuthStack from "./auth/AuthStack";
 const Routes = (props)=>{
-  const {user,setUser,logout} = useContext(AppContext)
+  const {user,setUser} = useContext(AppContext)
   const [loading,setLoading] = useState(true)
   const [initializing,setInitializing]= useState(true)
   const onAuthStateChanged = (user)=>{
