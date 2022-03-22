@@ -1,7 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
 
 export const createNewUserInfo = (userInfo)=>{
-  firestore().collection('Users')
+  firestore().collection('Users' )
     .doc(userInfo.userID)
     .set({
       name: userInfo.name|| null,
@@ -18,7 +18,6 @@ export const createNewRoomChat = (members)=>{
   firestore().collection('Chatrooms')
     .add({
       members:members,
-      messages:[],
       lastMessage:null,
       updateTime:null,
     }).then((room)=>{
@@ -31,7 +30,7 @@ export const createNewMessage = (chatRoomId,message)=>{
     .add({
       type:message.type,
       content:message.content,
-      createdTime:message.createdTime,
+      createdTime:message.createdTime,//firestore.Timestamp.fromDate(new Date()),
     }).then(()=>{
     firestore().collection('Chatrooms').doc(chatRoomId).update({
       lastMessage:message,

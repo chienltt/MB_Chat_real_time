@@ -12,6 +12,10 @@ target 'Chat_RT' do
     :hermes_enabled => false
   )
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
+
   target 'Chat_RTTests' do
     inherit! :complete
     # Pods for testing

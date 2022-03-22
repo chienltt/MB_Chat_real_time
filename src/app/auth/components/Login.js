@@ -10,7 +10,7 @@ const Login = (props) => {
       <Button title={"dang nhap"} onPress={() => {
         // alert('You tapped the button!');
         //test
-        login("chientest@gmail.com", "123456");
+        login("chientest2@gmail.com", "12345678");
       }} />
     </View>
   );
