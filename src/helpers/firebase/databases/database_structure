@@ -1,0 +1,22 @@
+collection: Users{
+      UserId, //from authentication
+      name,
+      age ,
+      dateOfBirth,
+      description,
+      avatar // link to the address image of firebase storage
+      ChatRoomLists:[] // list User's ChatroomId
+}
+
+collection: Chatrooms{
+      ChatroomId, // auto-generated
+      members:members, // list Chatroom's UserId
+      lastMessage:null,
+      updateTime:null,
+      collection: message{
+              messageId, //auto-generated
+              type, // message type: text, image, video , emoji
+              content,
+              createdTime,
+      }
+}
