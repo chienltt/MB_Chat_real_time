@@ -1,33 +1,47 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { View, StyleSheet, ScrollView, Keyboard } from "react-native";
 import Message from "./Message";
-const MessageShow=(props)=>{
+import firestore from "@react-native-firebase/firestore";
+import moment from "moment";
+import AppContext from "../../../AppContext";
+
+const MessageShow = (props) => {
+  // const {user}=useContext(AppContext)
   const scrollViewRef = useRef();
-  const {listMessages,roomInfo } = props
+  const { listMessages, roomInfo,navigation } = props;
+  let isFirstRender = true
+  // useEffect(() => {
+  //   const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+  //     scrollViewRef.current.scrollToEnd({animated: true})
+  //   });
+  //   return () => {
+  //     showSubscription.remove();
+  //   };
+  // }, []);
   useEffect(() => {
-    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-      scrollViewRef.current.scrollToEnd({animated: true})
-    });
-    return () => {
-      showSubscription.remove();
-    };
-  }, []);
-  return(
+    scrollViewRef.current.scrollToEnd({ animated: true });
+  }, [listMessages]);
+
+  return (
     <ScrollView style={style.container}
                 ref={scrollViewRef}
-                onContentSizeChange={() => scrollViewRef.current.scrollToEnd({animated: true})}
+                onContentSizeChange={() => {
+                  if (isFirstRender  === true)
+                    scrollViewRef.current.scrollToEnd({ animated: true });
+                  isFirstRender =false;
+                }}
     >
-      {listMessages.map((mes,index)=>{
-        return(<Message key={index} messageInfo={mes} roomInfo={roomInfo}/>)
-      })}
-  </ScrollView>
-  )
-}
+      {listMessages !== undefined ? listMessages.map((mes, index) => {
+        return (<Message navigation={navigation} key={index} messageInfo={mes} roomInfo={roomInfo} />);
+      }) : <View></View>}
+    </ScrollView>
+  );
+};
 const style = StyleSheet.create({
-  container:{
-    height:'90%',
+  container: {
+    height: "90%",
     // justifyContent:"flex-end",
     // flexDirection:"column-reverse"
-  }
-})
-export default MessageShow
+  },
+});
+export default MessageShow;

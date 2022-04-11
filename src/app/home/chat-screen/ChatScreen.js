@@ -1,290 +1,88 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Text, View, StyleSheet, Button, TouchableOpacity, ScrollView, Keyboard } from "react-native";
 import Avatar from "../../../helpers/Avatar";
 import Icon from 'react-native-vector-icons/AntDesign'
 import MessageShow from "./component/MessageShow";
 import CreateMessage from "./component/CreateMessage";
-const listMessages =[
-  {
-    content:'Chao ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'Tai sao ban chao minh',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Vi minh thich ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'lam nguoi yeu minh nhe',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'oke',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Chao ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'Tai sao ban chao minh',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Vi minh thich ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'lam nguoi yeu minh nhe',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'oke',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Chao ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'Tai sao ban chao minh',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Vi minh thich ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'lam nguoi yeu minh nhe',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'oke',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Chao ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'Tai sao ban chao minh',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Vi minh thich ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'lam nguoi yeu minh nhe',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'oke',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Chao ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'Tai sao ban chao minh',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Vi minh thich ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'Chao ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'Tai sao ban chao minh',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Vi minh thich ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'lam nguoi yeu minh nhe',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'oke',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Chao ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'Tai sao ban chao minh',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Vi minh thich ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'lam nguoi yeu minh nhe',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'oke',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Chao ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'Tai sao ban chao minh',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Vi minh thich ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'lam nguoi yeu minh nhe',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'oke',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Chao ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'Tai sao ban chao minh',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-  {
-    content:'Vi minh thich ban',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'lam nguoi yeu minh nhe',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:false
-  },
-  {
-    content:'oke',
-    createdTime :'2022/01/01 14:04:03',
-    type:'text',
-    isOwn:true
-  },
-
-
-]
+import AppContext from "../../AppContext";
+import { getMessages, getMessagesRealtime } from "../../../helpers/firebase/databases/ReadData";
+import moment from "moment";
+import firestore from "@react-native-firebase/firestore";
 
 const ChatScreen = (props)=>{
+  const {user} = useContext(AppContext)
   const roomInfo = props.route.params
   const {navigation}=props
   const [messageShowSize, setMessageShowSize] = useState(8)
+  const [listMessages,setListMessages] = useState([])
+  const [messageRealtime,setMessageRealtime] = useState()
+  const roomId = 'gSKawbVoW8WfS6DlNlgu'
+  let initStateData = true
+  useEffect(()=>{
+    const getListMessagesInit= async ()=>{
+      const roomId='gSKawbVoW8WfS6DlNlgu'
+      const data = await getMessages(roomId)
+      const listMessages=data.map(message=>{
+        const date=message.createdTime.toDate()
+        const createdTime = moment(date)
+        message.createdTimeFormated=createdTime.format('MM/DD HH:MM:ss')
+        message.user===user.uid ? message.isOwn = true :message.isOwn=false
+        return message
+      })
+      setListMessages(listMessages)
+    }
+    getListMessagesInit()
+  },[])
 
-  useEffect(() => {
-    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-      setMessageShowSize(8)
-    });
-    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      setMessageShowSize(8)
-    });
+  useEffect(()=>{
+    // if (Object.keys(listMessages).length!==0) {
+    const getListMessagesRealtime= async ()=> {
+      let data = []
+      // const data = await getMessagesRealtime(roomId)
+      await firestore()
+        .collection("Chatrooms")
+        .doc(roomId)
+        .collection("message")
+        .orderBy("createdTime", "desc")
+        .limit(1)
+        .onSnapshot(function(querySnapshot) {
+          console.log('khoi tao la',initStateData)
+          if (initStateData===true) {
+            initStateData=false
+            return;
+          }
+          querySnapshot.forEach(function(doc) {
+            data.push(doc.data());
+          });
+          console.log('du lieu realtime la', data[data.length - 1])
+          const message = data[data.length - 1]
+          const date = message.createdTime.toDate()
+          const createdTime = moment(date)
+          message.createdTimeFormated = createdTime.format('MM/DD HH:MM:ss')
+          message.user === user.uid ? message.isOwn = true : message.isOwn = false
+          setMessageRealtime(message)
+        });
+    }
+    getListMessagesRealtime()
+    // }
+  },[roomId])
+  useEffect(()=>{
+    if(messageRealtime)  setListMessages((prev)=>[...prev,messageRealtime])
+  },[messageRealtime])
 
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
-  }, []);
+  // useEffect(() => {
+  //   const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+  //     setMessageShowSize(8)
+  //   });
+  //   const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+  //     setMessageShowSize(8)
+  //   });
+  //
+  //   return () => {
+  //     showSubscription.remove();
+  //     hideSubscription.remove();
+  //   };
+  // }, []);
 
   return(
     <View style={style.container}>
@@ -298,9 +96,9 @@ const ChatScreen = (props)=>{
         {/*</View>*/}
       </View>
       <View style={[style.message_show]}>
-        <MessageShow listMessages={listMessages} roomInfo={roomInfo}/>
+        <MessageShow navigation={navigation} listMessages={listMessages} setListMessages={setListMessages} roomInfo={roomInfo}/>
       </View>
-      <CreateMessage/>
+      <CreateMessage listMessages={listMessages} setListMessages={setListMessages}/>
     </View>
   )
 }
@@ -329,7 +127,7 @@ const style  = StyleSheet.create({
     backgroundColor:'#2E8C2E',
   },
   message_show:{
-    flex:1,
+    flex:8,
   },
   icon_goback:{
     paddingRight:5,

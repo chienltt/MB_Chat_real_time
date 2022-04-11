@@ -3,7 +3,7 @@ import { Button, Text, View } from "react-native";
 import AppContext from "../../AppContext";
 
 const Login = (props) => {
-  const { login, logout } = useContext(AppContext);
+  const {login, logout } = useContext(AppContext);
   return (
     <View>
       <Text>day la trang dang nhap</Text>

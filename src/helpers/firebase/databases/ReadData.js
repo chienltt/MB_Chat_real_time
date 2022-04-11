@@ -1,29 +1,43 @@
-const MessageLimit = 15
+const MessageLimit = 15;
 import firestore from "@react-native-firebase/firestore";
-export const getMessages = (roomId)=>{
-  firestore()
-    .collection('Chatrooms')
+
+export const getMessagesRealtime = async (roomId) => {
+  let data = [];
+  await firestore()
+    .collection("Chatrooms")
     .doc(roomId)
     .collection("message")
-    .orderBy('createdTime','desc')
-    .limit(MessageLimit)
+    .orderBy("createdTime", "asc")
     .onSnapshot(function(querySnapshot) {
-      let datas = [];
       querySnapshot.forEach(function(doc) {
-        datas.push(doc.data());
+        data.push(doc.data());
       });
-      return datas
+      console.log('du lieu realtime la',data[data.length-1])
+      return data;
     });
-}
+};
 
-export const getListRoomChats = (ListRoomID) =>{
-  const listRoomData = ListRoomID.map((id)=>{
-    firestore().collection('Chatrooms').where('id','==',id)
-      .get().then((querySnapshot)=>{
+export const getMessages = async (roomID) => {
+  let data = [];
+  await firestore().collection("Chatrooms")
+    .doc(roomID)
+    .collection("message")
+    .orderBy("createdTime", "asc")
+    .get().then((querySnapshot) => {
+      querySnapshot.forEach(snapshot => {
+        data.push(snapshot.data());
+      });
+    });
+  return data;
+};
+export const getListRoomChats = (ListRoomID) => {
+  const listRoomData = ListRoomID.map((id) => {
+    firestore().collection("Chatrooms").where("id", "==", id)
+      .get().then((querySnapshot) => {
       querySnapshot.forEach(function(doc) {
         listRoomData.push(doc.data());
       });
-    })
-  })
-  return listRoomData
-}
+    });
+  });
+  return listRoomData;
+};

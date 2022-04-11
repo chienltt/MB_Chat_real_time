@@ -30,11 +30,12 @@ export const createNewMessage = (chatRoomId,message)=>{
     .add({
       type:message.type,
       content:message.content,
-      createdTime:message.createdTime,//firestore.Timestamp.fromDate(new Date()),
+      createdTime:firestore.Timestamp.fromDate(message.createdTime),//firestore.Timestamp.fromDate(new Date()),
+      user:message.user
     }).then(()=>{
     firestore().collection('Chatrooms').doc(chatRoomId).update({
       lastMessage:message,
-      updateTime:message.createdTime
+      updateTime:firestore.Timestamp.fromDate(message.createdTime)
     }).then(()=>{
       console.log('message added!')
     })

@@ -3,8 +3,8 @@ import storage from "@react-native-firebase/storage";
 import RNFS from "react-native-fs";
 
 export const UploadFile = async (fileData)=>{
-  if (fileData.type === 'image/jpeg') await UploadImage(fileData.uri)
-  if (fileData.type === 'video/mpeg') await UploadVideo(fileData.uri)
+  if (fileData.type === 'image/jpeg')  return  await UploadImage(fileData.uri)
+  if (fileData.type === 'video/mpeg') return  await UploadVideo(fileData.uri)
 }
 
 export const UploadImage= async (uri) => {
@@ -13,10 +13,13 @@ export const UploadImage= async (uri) => {
   try {
     const task = await storage().ref(filename).putFile(uploadUri);
     if(task) {
+      const url = await storage().ref(filename).getDownloadURL().catch((e)=>{console.log('cannot get url')})
       console.log('Upload image successfully!')
+      return url
     }
   }catch (e){
     console.log('Error :',e)
+    return null
   }
 
 }
@@ -26,9 +29,12 @@ export const UploadVideo= async (uri) =>{
   try {
     const task =     await storage().ref(filename).putString(data, 'base64');
     if(task) {
+      const url = await storage().ref(filename).getDownloadURL().catch((e)=>{console.log('cannot get url')})
       console.log('Upload video successfully!')
+      return url
     }
   }catch (e){
     console.log('Error :',e)
+    return null
   }
 }
