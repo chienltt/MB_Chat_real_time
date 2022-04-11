@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AppContext from "./AppContext";
 import Routes from "./Routes";
-import { login, logout,register } from "./auth/methods";
+import { login, logout, register } from "./auth/methods";
 
 const AppProviders=(props)=>{
   const [user,setUser] = useState(null)
