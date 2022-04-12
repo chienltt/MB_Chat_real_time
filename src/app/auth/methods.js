@@ -2,14 +2,17 @@ import auth from "@react-native-firebase/auth";
 
 export const login = async (email, password) => {
   try {
-    await auth().signInWithEmailAndPassword(email, password);
+    console.log('okok',email)
+    const data =await auth().signInWithEmailAndPassword(email, password);
+    console.log('data',data)
   } catch (e) {
     console.log("Login error:", e);
   }
 };
 export const register = async (email, password) => {
   try {
-    await auth().createUserWithEmailAndPassword(email, password);
+    const data = await auth().createUserWithEmailAndPassword(email, password);
+    console.log('data',data)
   } catch (e) {
     console.log("Register error:", e);
   }

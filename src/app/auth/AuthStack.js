@@ -5,7 +5,7 @@ import Register from "./components/Register"
 const AuthStack = ()=>{
   const Stack = createNativeStackNavigator()
   return(
-    <Stack.Navigator initialRouteName={'Register'}>
+    <Stack.Navigator initialRouteName={'Login'}>
     {/*here is Login, Register screen...*/}
       <Stack.Screen name={'Login'} component={Login}/>
       <Stack.Screen name={'Register'} component={Register}/>

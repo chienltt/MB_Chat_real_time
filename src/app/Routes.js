@@ -6,10 +6,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import HomeStack from "./home/HomeStack";
 import AuthStack from "./auth/AuthStack";
 const Routes = (props)=>{
-  const {user,setUser} = useContext(AppContext)
+  const {user,setUser,logout} = useContext(AppContext)
   const [loading,setLoading] = useState(true)
   const [initializing,setInitializing]= useState(true)
   const onAuthStateChanged = (user)=>{
+    console.log('okok',user)
     setUser(user)
     if(initializing) setInitializing(false)
     setLoading(false)
@@ -19,9 +20,10 @@ const Routes = (props)=>{
     return subscriber;
   })
   if(loading) return <LoadingScreen/>
+  // logout()
   return(
       <NavigationContainer>
-        {<AuthStack/>}
+        {user?<HomeStack/>:<AuthStack/>}
       </NavigationContainer>
   )
 }
