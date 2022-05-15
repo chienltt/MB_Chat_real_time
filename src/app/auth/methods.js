@@ -9,7 +9,7 @@ export const login = async (email, password) => {
 };
 export const register = async (email, password) => {
   try {
-    await auth().createUserWithEmailAndPassword(email, password);
+    return await auth().createUserWithEmailAndPassword(email, password);
   } catch (e) {
     console.log("Register error:", e);
   }

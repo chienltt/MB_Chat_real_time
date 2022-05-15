@@ -8,13 +8,16 @@ import AppContext from "../AppContext";
 import Login from "../auth/components/Login";
 import HomeScreen from "./home-screen/HomeScreen";
 import ChatScreen from "./chat-screen/ChatScreen";
+import ProfileScreen from "./home-screen/ProfileScreen";
 
 const HomeStack = (props) => {
   const Stack = createNativeStackNavigator()
   return (
-    <Stack.Navigator screenOptions={{headerShown :false}} initialRouteName={'HomeScreen'}>
+    <Stack.Navigator screenOptions={{headerShown :false}} initialRouteName={'ProfileScreen'}>
       <Stack.Screen name={'HomeScreen'} component={HomeScreen}/>
       <Stack.Screen name={'ChatScreen'} component={ChatScreen}/>
+      <Stack.Screen name={'ProfileScreen'} component={ProfileScreen}/>
+
     </Stack.Navigator>
   );
 };

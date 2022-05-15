@@ -8,14 +8,12 @@ import {
     TextInput,
     View,
     Text,
-    Image,
     KeyboardAvoidingView,
     Keyboard,
     TouchableOpacity,
     ScrollView, Button,
 } from 'react-native';
-
-// import Loader from './Components/Loader';
+import {createNewUserInfo} from "../../../helpers/firebase/databases/WriteData";
 
 const Register = (props) => {
     const { register } = useContext(AppContext);
@@ -25,8 +23,8 @@ const Register = (props) => {
     const [userDateOfBirth, setUserDateOfBirth] = useState(new Date());
     const [userDescription, setUserDescription] = useState('');
     const [userPassword, setUserPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [errortext, setErrortext] = useState('');
     const [
         isRegistraionSuccess,
         setIsRegistraionSuccess
@@ -34,15 +32,15 @@ const Register = (props) => {
 
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     // const [open, setOpen] = useState(false);
 
     const emailInputRef = createRef();
-    const dateOfBirthRef = createRef();
     const descriptionInputRef = createRef();
     const passwordInputRef = createRef();
+    const confirmPasswordInputRef = createRef();
 
     const handleSubmitButton = async () => {
-        setErrortext('');
         if (!userName) {
             alert('Please fill Name');
             return;
@@ -62,18 +60,27 @@ const Register = (props) => {
             alert('Please fill Password');
             return;
         }
+        if (userPassword !== confirmPassword) {
+            alert('Password and Confirm password not identical')
+        }
         //Show Loader
         setLoading(true);
-        const dataToSend = {
-            name: userName,
-            email: userEmail,
-            dateOfBirth: userDateOfBirth,
-            Description: userDescription,
-            password: userPassword,
-        };
-        await register(userEmail, userPassword);
-        setIsRegistraionSuccess(true);
-        setLoading(false);
+        await register(userEmail, userPassword)
+            .then((key) => {
+                const dataToSend = {
+                    userId: key,
+                    name: userName,
+                    email: userEmail,
+                    dateOfBirth: userDateOfBirth,
+                    description: userDescription,
+                    password: userPassword,
+                };
+                console.log(dataToSend);
+                createNewUserInfo(dataToSend);
+                setIsRegistraionSuccess(true);
+                setLoading(false);
+            })
+
     };
 
     if (isRegistraionSuccess) {
@@ -98,14 +105,14 @@ const Register = (props) => {
                 <TouchableOpacity
                     style={styles.buttonStyle}
                     activeOpacity={0.5}
-                    onPress={() => props.navigation.navigate('Login')}>
-                    {/*onPress={() => {*/}
-                    {/*    setIsRegistraionSuccess(false)*/}
-                    {/*    setUserName('')*/}
-                    {/*    setUserEmail('')*/}
-                    {/*    setUserPassword('')*/}
-                    {/*    setUserDescription(' ')*/}
-                    {/*}}>*/}
+                    // onPress={() => props.navigation.navigate('Login')}>
+                    onPress={() => {
+                        setIsRegistraionSuccess(false)
+                        setUserName('')
+                        setUserEmail('')
+                        setUserPassword('')
+                        setUserDescription(' ')
+                    }}>
                     <Text style={styles.buttonTextStyle}>Register Again</Text>
                 </TouchableOpacity>
             </View>
@@ -156,6 +163,7 @@ const Register = (props) => {
                                 blurOnSubmit={false}
                             />
                         </View>
+                        <Text style={styles.title_text}>Password</Text>
                         <View style={styles.SectionStyle}>
                             <TextInput
                                 style={styles.inputStyle}
@@ -168,12 +176,53 @@ const Register = (props) => {
                                 ref={passwordInputRef}
                                 returnKeyType="next"
                                 secureTextEntry={showPassword}
+                                onSubmitEditing={() =>
+                                    confirmPasswordInputRef.current &&
+                                    confirmPasswordInputRef.current.focus()
+                                }
                                 blurOnSubmit={false}
                             />
                             <TouchableOpacity
                                 onPress={() => {setShowPassword(!showPassword)}}
                             >
                                 {showPassword ?
+                                    <Feather
+                                        name="eye-off"
+                                        color='#dadae8'
+                                        size={20}
+                                    />
+                                    :
+                                    <Feather
+                                        name="eye"
+                                        color='#dadae8'
+                                        size={20}
+                                    />
+                                }
+                            </TouchableOpacity>
+                        </View>
+                        <Text style={styles.title_text}>Confirm Password</Text>
+                        <View style={styles.SectionStyle}>
+                            <TextInput
+                                style={styles.inputStyle}
+                                onChangeText={(ConfirmUserPassword) =>
+                                    setConfirmPassword(ConfirmUserPassword)
+                                }
+                                underlineColorAndroid="#f000"
+                                placeholder="Confirm Password"
+                                placeholderTextColor="#8b9cb5"
+                                ref={confirmPasswordInputRef}
+                                returnKeyType="next"
+                                secureTextEntry={showConfirmPassword}
+                                onSubmitEditing={() =>
+                                    descriptionInputRef.current &&
+                                    descriptionInputRef.current.focus()
+                                }
+                                blurOnSubmit={false}
+                            />
+                            <TouchableOpacity
+                                onPress={() => {setShowConfirmPassword(!showConfirmPassword)}}
+                            >
+                                {showConfirmPassword ?
                                     <Feather
                                         name="eye-off"
                                         color='#dadae8'
@@ -213,6 +262,7 @@ const Register = (props) => {
                                 }}
                             />
                         </View>
+                        <Text style={styles.title_text}>Description</Text>
                         <View style={styles.SectionStyle}>
                             <TextInput
                                 style={styles.inputStyle}
@@ -229,12 +279,6 @@ const Register = (props) => {
                                 blurOnSubmit={false}
                             />
                         </View>
-
-                        {errortext != '' ? (
-                            <Text style={styles.errorTextStyle}>
-                                {errortext}
-                            </Text>
-                        ) : null}
                         <TouchableOpacity
                             style={styles.buttonStyle}
                             activeOpacity={0.5}

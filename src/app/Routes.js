@@ -21,7 +21,7 @@ const Routes = (props)=>{
   if(loading) return <LoadingScreen/>
   return(
       <NavigationContainer>
-        {<AuthStack/>}
+        {<HomeStack/>}
       </NavigationContainer>
   )
 }
