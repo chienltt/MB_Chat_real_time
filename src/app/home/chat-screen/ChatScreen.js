@@ -83,7 +83,6 @@ const ChatScreen = (props)=>{
   //     hideSubscription.remove();
   //   };
   // }, []);
-
   return(
     <View style={style.container}>
       <View style={style.header}>

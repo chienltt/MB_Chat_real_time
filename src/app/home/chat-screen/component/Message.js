@@ -79,23 +79,11 @@ const style = StyleSheet.create({
     flexDirection: "row-reverse",
   },
   image_message: {
-    // flex:1,
     width: 200,
     aspectRatio:3/2,
-    // height:null,
-    // resizeMode:'contain',
     paddingVertical: 3,
     paddingHorizontal: 6,
     borderRadius: 10,
   },
-  // video_message:{
-  //   width: 200,
-  //   aspectRatio:3/2,
-  //   // height:null,
-  //   // resizeMode:'contain',
-  //   paddingVertical: 3,
-  //   paddingHorizontal: 6,
-  //   borderRadius: 10,
-  // }
 });
 export default Message;

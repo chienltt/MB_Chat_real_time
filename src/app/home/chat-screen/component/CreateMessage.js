@@ -67,7 +67,8 @@ const CreateMessage = (props) => {
           await onSubmitVideoMessage(url);
       }}><FontAwesomeIcon size={28} color={"#6AF111"} name={"folder"} /></TouchableOpacity>
       <TouchableOpacity onPress={async () => {
-        await ChooseFileLaunchCamera();
+        const url = await ChooseFileLaunchCamera();
+        await onSubmitImageMessage(url);
       }
       }><FontAwesomeIcon size={28} color={"#6AF111"} name={"camera"} /></TouchableOpacity>
       <TextInput

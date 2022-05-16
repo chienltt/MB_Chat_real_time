@@ -10,7 +10,6 @@ const Routes = (props)=>{
   const [loading,setLoading] = useState(true)
   const [initializing,setInitializing]= useState(true)
   const onAuthStateChanged = (user)=>{
-    console.log('okok',user)
     setUser(user)
     if(initializing) setInitializing(false)
     setLoading(false)

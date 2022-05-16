@@ -1,6 +1,5 @@
 const MessageLimit = 15;
 import firestore from "@react-native-firebase/firestore";
-
 export const getMessagesRealtime = async (roomId) => {
   let data = [];
   await firestore()
@@ -41,3 +40,15 @@ export const getListRoomChats = (ListRoomID) => {
   });
   return listRoomData;
 };
+export const searchUser = async (searchValue)=>{
+    let data = [];
+    await firestore().collection("Users")
+        .where("name", ">=", searchValue)
+        .orderBy("name", "asc")
+        .get().then((querySnapshot) => {
+            querySnapshot.forEach(snapshot => {
+                data.push(snapshot.data());
+            });
+        });
+    return data;
+}
