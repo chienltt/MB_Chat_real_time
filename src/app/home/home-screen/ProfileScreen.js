@@ -18,31 +18,28 @@ import AppContext from "../../AppContext";
 const ProfileScreen = ({navigation, route}) => {
     const {user, logout} = useContext(AppContext);
 
-    const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [deleted, setDeleted] = useState(false);
     const [userData, setUserData] = useState(null);
     const [darkMode, setDarkMode] = useState(false);
 
-    // const getUser = async() => {
-    //     await firestore()
-    //         .collection('users')
-    //         .doc( route.params ? route.params.userId : user.uid)
-    //         .get()
-    //         .then((documentSnapshot) => {
-    //             if( documentSnapshot.exists ) {
-    //                 console.log('User Data', documentSnapshot.data());
-    //                 setUserData(documentSnapshot.data());
-    //             }
-    //         })
-    // }
+    const getUser = async() => {
+        await firestore()
+            .collection('Users')
+            .doc( route.params ? route.params.userId : "FOajGnNk8K4CiLGyk4Ik")
+            .get()
+            .then((documentSnapshot) => {
+                if( documentSnapshot.exists ) {
+                    console.log('User Data', documentSnapshot.data());
+                    setUserData(documentSnapshot.data());
+                }
+            })
+    }
 
-    // useEffect(() => {
-    //     getUser();
-    //     navigation.addListener("focus", () => setLoading(!loading));
-    // }, [navigation, loading]);
+    useEffect(() => {
+        getUser();
+        setLoading(!loading);
+    }, []);
 
-    const handleDelete = () => {};
 
     return (
         <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
@@ -52,12 +49,13 @@ const ProfileScreen = ({navigation, route}) => {
                 showsVerticalScrollIndicator={false}>
                 <Image
                     style={styles.userImg}
-                    source={(userData ? {uri: userData.userImg} : avatar)}
+                    // source={(userData ? {uri: userData.userImg} : avatar)}
+                    source={(avatar)}
                 />
-                <Text style={styles.userName}>{userData ? userData.fname || 'Test' : 'Test'} {userData ? userData.lname || 'User' : 'User'}</Text>
+                <Text style={styles.userName}>{userData ? userData.name || 'Test' : 'Test'}</Text>
                 {/* <Text>{route.params ? route.params.userId : user.uid}</Text> */}
-                <Text style={styles.aboutUser}>
-                    {userData ? userData.about || 'No details added.' : 'A lot of detail here'}
+                <Text style={styles.description}>
+                    {userData ? userData.description || 'No details added.' : 'A lot of detail here'}
                 </Text>
                 <View style={styles.userBtnWrapper}>
                     {route.params ? (
@@ -154,7 +152,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
     },
-    aboutUser: {
+    description: {
         fontSize: 12,
         fontWeight: '600',
         color: '#666',

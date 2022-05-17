@@ -9,6 +9,7 @@ import Login from "../auth/components/Login";
 import HomeScreen from "./home-screen/HomeScreen";
 import ChatScreen from "./chat-screen/ChatScreen";
 import ProfileScreen from "./home-screen/ProfileScreen";
+import EditProfileScreen from "./home-screen/EditProfileScreen";
 
 const HomeStack = (props) => {
   const Stack = createNativeStackNavigator()
@@ -17,6 +18,7 @@ const HomeStack = (props) => {
       <Stack.Screen name={'HomeScreen'} component={HomeScreen}/>
       <Stack.Screen name={'ChatScreen'} component={ChatScreen}/>
       <Stack.Screen name={'ProfileScreen'} component={ProfileScreen}/>
+        <Stack.Screen name={'EditProfileScreen'} component={EditProfileScreen}/>
 
     </Stack.Navigator>
   );

@@ -75,7 +75,6 @@ const Register = (props) => {
                     description: userDescription,
                     password: userPassword,
                 };
-                console.log(dataToSend);
                 createNewUserInfo(dataToSend);
                 setIsRegistraionSuccess(true);
                 setLoading(false);

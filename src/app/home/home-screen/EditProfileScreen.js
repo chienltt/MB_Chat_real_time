@@ -6,69 +6,69 @@ import {
     ImageBackground,
     TextInput,
     StyleSheet,
-    Alert,
+    Alert, Button, Platform,
 } from 'react-native';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
+// import Animated from 'react-native-reanimated';
+// import BottomSheet from 'reanimated-bottom-sheet';
 
 import AppContext from "../../AppContext";
 import firestore from '@react-native-firebase/firestore';
-import storage from '@react-native-firebase/storage';
+// import storage from '@react-native-firebase/storage';
+import DatePicker from "react-native-date-picker";
+import avatar from "./image/avatar.png";
 
 const EditProfileScreen = () => {
     const {user, logout} = useContext(AppContext);
-    const [image, setImage] = useState(null);
-    const [uploading, setUploading] = useState(false);
-    const [transferred, setTransferred] = useState(0);
+    // const [image, setImage] = useState(null);
+    // const [uploading, setUploading] = useState(false);
+    // const [transferred, setTransferred] = useState(0);
     const [userData, setUserData] = useState(null);
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
-    // const getUser = async() => {
-    //     const currentUser = await firestore()
-    //         .collection('users')
-    //         .doc(user.uid)
-    //         .get()
-    //         .then((documentSnapshot) => {
-    //             if( documentSnapshot.exists ) {
-    //                 console.log('User Data', documentSnapshot.data());
-    //                 setUserData(documentSnapshot.data());
-    //             }
-    //         })
-    // }
-    //
-    // const handleUpdate = async() => {
-    //     let imgUrl = await uploadImage();
-    //
-    //     if( imgUrl == null && userData.userImg ) {
-    //         imgUrl = userData.userImg;
-    //     }
-    //
-    //     firestore()
-    //         .collection('users')
-    //         .doc(user.uid)
-    //         .update({
-    //             fname: userData.fname,
-    //             lname: userData.lname,
-    //             about: userData.about,
-    //             phone: userData.phone,
-    //             country: userData.country,
-    //             city: userData.city,
-    //             userImg: imgUrl,
-    //         })
-    //         .then(() => {
-    //             console.log('User Updated!');
-    //             Alert.alert(
-    //                 'Profile Updated!',
-    //                 'Your profile has been updated successfully.'
-    //             );
-    //         })
-    // }
-    //
+
+    const getUser = async() => {
+        const currentUser = await firestore()
+            .collection('Users')
+            .doc("FOajGnNk8K4CiLGyk4Ik")
+            .get()
+            .then((documentSnapshot) => {
+                if( documentSnapshot.exists ) {
+                    let data = documentSnapshot.data();
+                    // console.log('User Data1', data);
+                    setUserData({...data, dateOfBirth: new Date(data.dateOfBirth.seconds * 1000)});
+                }
+            })
+    }
+
+    const handleUpdate = async() => {
+        // let imgUrl = await uploadImage();
+        //
+        // if( imgUrl == null && userData.userImg ) {
+        //     imgUrl = userData.userImg;
+        // }
+
+        firestore()
+            .collection('Users')
+            .doc("FOajGnNk8K4CiLGyk4Ik")
+            .update({
+                'name': userData.name,
+                'description': userData.description,
+                'dateOfBirth': userData.dateOfBirth,
+            })
+            .then(() => {
+                console.log('User Updated!');
+                Alert.alert(
+                    'Profile Updated!',
+                    'Your profile has been updated successfully.'
+                );
+            })
+    }
+
     // const uploadImage = async () => {
     //     if( image == null ) {
     //         return null;
@@ -119,10 +119,10 @@ const EditProfileScreen = () => {
     //     }
     //
     // };
-    //
-    // useEffect(() => {
-    //     getUser();
-    // }, []);
+
+    useEffect(() => {
+        getUser();
+    }, []);
 
     // const takePhotoFromCamera = () => {
     //     ImagePicker.openCamera({
@@ -148,63 +148,64 @@ const EditProfileScreen = () => {
     //         console.log(image);
     //         const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
     //         setImage(imageUri);
-    //         this.bs.current.snapTo(1);
+    //         bs.current.snapTo(1);
     //     });
     // };
 
-    this.renderInner = () => (
-        <View style={styles.panel}>
-            <View style={{alignItems: 'center'}}>
-                <Text style={styles.panelTitle}>Upload Photo</Text>
-                <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
-            </View>
-            <TouchableOpacity
-                style={styles.panelButton}
-                onPress={takePhotoFromCamera}>
-                <Text style={styles.panelButtonTitle}>Take Photo</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.panelButton}
-                onPress={choosePhotoFromLibrary}>
-                <Text style={styles.panelButtonTitle}>Choose From Library</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.panelButton}
-                onPress={() => this.bs.current.snapTo(1)}>
-                <Text style={styles.panelButtonTitle}>Cancel</Text>
-            </TouchableOpacity>
-        </View>
-    );
+    // const renderInner = () => (
+    //     <View style={styles.panel}>
+    //         <View style={{alignItems: 'center'}}>
+    //             <Text style={styles.panelTitle}>Upload Photo</Text>
+    //             <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
+    //         </View>
+    //         <TouchableOpacity
+    //             style={styles.panelButton}
+    //             onPress={takePhotoFromCamera}>
+    //             <Text style={styles.panelButtonTitle}>Take Photo</Text>
+    //         </TouchableOpacity>
+    //         <TouchableOpacity
+    //             style={styles.panelButton}
+    //             onPress={choosePhotoFromLibrary}>
+    //             <Text style={styles.panelButtonTitle}>Choose From Library</Text>
+    //         </TouchableOpacity>
+    //         <TouchableOpacity
+    //             style={styles.panelButton}
+    //             onPress={() => bs.current.snapTo(1)}>
+    //             <Text style={styles.panelButtonTitle}>Cancel</Text>
+    //         </TouchableOpacity>
+    //     </View>
+    // );
 
-    this.renderHeader = () => (
-        <View style={styles.header}>
-            <View style={styles.panelHeader}>
-                <View style={styles.panelHandle} />
-            </View>
-        </View>
-    );
+    // const renderHeader = () => (
+    //     <View style={styles.header}>
+    //         <View style={styles.panelHeader}>
+    //             <View style={styles.panelHandle} />
+    //         </View>
+    //     </View>
+    // );
 
-    this.bs = React.createRef();
-    this.fall = new Animated.Value(1);
+    const bs = React.createRef();
+    // const fall = new Animated.Value(1);
 
     return (
         <View style={styles.container}>
-            <BottomSheet
-                ref={this.bs}
-                snapPoints={[330, -5]}
-                renderContent={this.renderInner}
-                renderHeader={this.renderHeader}
-                initialSnap={1}
-                callbackNode={this.fall}
-                enabledGestureInteraction={true}
-            />
-            <Animated.View
-                style={{
-                    margin: 20,
-                    opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
-                }}>
+            {/*<BottomSheet*/}
+            {/*    ref={this.bs}*/}
+            {/*    snapPoints={[330, -5]}*/}
+            {/*    renderContent={this.renderInner}*/}
+            {/*    renderHeader={this.renderHeader}*/}
+            {/*    initialSnap={1}*/}
+            {/*    callbackNode={this.fall}*/}
+            {/*    enabledGestureInteraction={true}*/}
+            {/*/>*/}
+
+            {/*<Animated.View*/}
+            {/*    style={{*/}
+            {/*        margin: 20,*/}
+            {/*        opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),*/}
+            {/*    }}>*/}
                 <View style={{alignItems: 'center'}}>
-                    <TouchableOpacity onPress={() => this.bs.current.snapTo(0)}>
+                    <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
                         <View
                             style={{
                                 height: 100,
@@ -214,14 +215,14 @@ const EditProfileScreen = () => {
                                 alignItems: 'center',
                             }}>
                             <ImageBackground
-                                source={{
-                                    uri: image
-                                        ? image
-                                        : userData
-                                            ? userData.userImg ||
-                                            'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg'
-                                            : 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg',
-                                }}
+                                // source={{
+                                //     uri: image
+                                //         ? image
+                                //         : userData
+                                //             ? userData.userImg
+                                // }}
+                                source={(avatar)}
+
                                 style={{height: 100, width: 100}}
                                 imageStyle={{borderRadius: 15}}>
                                 <View
@@ -248,7 +249,7 @@ const EditProfileScreen = () => {
                         </View>
                     </TouchableOpacity>
                     <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>
-                        {userData ? userData.fname : ''} {userData ? userData.lname : ''}
+                        {userData ? userData.name : ''}
                     </Text>
                     {/* <Text>{user.uid}</Text> */}
                 </View>
@@ -256,22 +257,11 @@ const EditProfileScreen = () => {
                 <View style={styles.action}>
                     <FontAwesome name="user-o" color="#333333" size={20} />
                     <TextInput
-                        placeholder="First Name"
+                        placeholder="Name"
                         placeholderTextColor="#666666"
                         autoCorrect={false}
-                        value={userData ? userData.fname : ''}
-                        onChangeText={(txt) => setUserData({...userData, fname: txt})}
-                        style={styles.textInput}
-                    />
-                </View>
-                <View style={styles.action}>
-                    <FontAwesome name="user-o" color="#333333" size={20} />
-                    <TextInput
-                        placeholder="Last Name"
-                        placeholderTextColor="#666666"
-                        value={userData ? userData.lname : ''}
-                        onChangeText={(txt) => setUserData({...userData, lname: txt})}
-                        autoCorrect={false}
+                        value={userData ? userData.name : ''}
+                        onChangeText={(txt) => setUserData({...userData, name: txt})}
                         style={styles.textInput}
                     />
                 </View>
@@ -282,53 +272,43 @@ const EditProfileScreen = () => {
                         numberOfLines={3}
                         placeholder="About Me"
                         placeholderTextColor="#666666"
-                        value={userData ? userData.about : ''}
-                        onChangeText={(txt) => setUserData({...userData, about: txt})}
+                        value={userData ? userData.description : ''}
+                        onChangeText={(txt) => setUserData({...userData, description: txt})}
                         autoCorrect={true}
-                        style={[styles.textInput, {height: 40}]}
+                        style={[styles.textInput]}
                     />
                 </View>
-                <View style={styles.action}>
-                    <Feather name="phone" color="#333333" size={20} />
-                    <TextInput
-                        placeholder="Phone"
-                        placeholderTextColor="#666666"
-                        keyboardType="number-pad"
-                        autoCorrect={false}
-                        value={userData ? userData.phone : ''}
-                        onChangeText={(txt) => setUserData({...userData, phone: txt})}
-                        style={styles.textInput}
-                    />
-                </View>
+            <View style={styles.DateTimeContainer}>
+                <Button title="Date Of Birth" onPress={() => setShowDatePicker(true)} />
+                <Text style={styles.date_text}>{(function() {
+                        let dateBirth = userData ? userData.dateOfBirth : new Date();
+                        let dd = String(dateBirth.getDate()).padStart(2, '0');
+                        let mm = String(dateBirth.getMonth() + 1).padStart(2, '0');
+                        let yyyy = dateBirth.getFullYear();
 
-                <View style={styles.action}>
-                    <FontAwesome name="globe" color="#333333" size={20} />
-                    <TextInput
-                        placeholder="Country"
-                        placeholderTextColor="#666666"
-                        autoCorrect={false}
-                        value={userData ? userData.country : ''}
-                        onChangeText={(txt) => setUserData({...userData, country: txt})}
-                        style={styles.textInput}
-                    />
-                </View>
-                <View style={styles.action}>
-                    <MaterialCommunityIcons
-                        name="map-marker-outline"
-                        color="#333333"
-                        size={20}
-                    />
-                    <TextInput
-                        placeholder="City"
-                        placeholderTextColor="#666666"
-                        autoCorrect={false}
-                        value={userData ? userData.city : ''}
-                        onChangeText={(txt) => setUserData({...userData, city: txt})}
-                        style={styles.textInput}
-                    />
-                </View>
+                        return dd + '/' + mm + '/' + yyyy;
+
+                })()}</Text>
+                <DatePicker
+                    modal
+                    open={showDatePicker}
+                    date={userData ? userData.dateOfBirth : new Date()}
+                    mode="date"
+                    onConfirm={(date) => {
+                        setShowDatePicker(false)
+                        setUserData({...userData, dateOfBirth: date})
+                    }}
+                    onCancel={() => {
+                        setShowDatePicker(false)
+                        console.log(userData.dateOfBirth);
+                    }}
+                />
+            </View>
+            <TouchableOpacity style={styles.buttonContainer } onPress={handleUpdate}>
+                <Text style={styles.buttonText}>Update</Text>
+            </TouchableOpacity>
                 {/*<FormButton buttonTitle="Update" onPress={handleUpdate} />*/}
-            </Animated.View>
+            {/*</Animated.View>*/}
         </View>
     );
 };
@@ -415,5 +395,34 @@ const styles = StyleSheet.create({
         marginTop: Platform.OS === 'ios' ? 0 : -12,
         paddingLeft: 10,
         color: '#333333',
+        height: 40,
+    },
+    DateTimeContainer: {
+        flexDirection: 'row',
+        height: 40,
+        marginLeft: 35,
+        marginRight: 35,
+        margin: 10,
+    },
+    date_text: {
+        color: 'black',
+        fontSize: 18,
+        marginLeft: 50,
+    },
+    buttonContainer: {
+        marginTop: 10,
+        width: '100%',
+        height: 50,
+        backgroundColor: '#2e64e5',
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 3,
+    },
+    buttonText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        fontFamily: 'Lato-Regular',
     },
 });
