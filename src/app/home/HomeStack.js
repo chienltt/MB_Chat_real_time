@@ -11,6 +11,8 @@ import ChatScreen from "./chat-screen/ChatScreen";
 import FileDetailShow from "./file-show-screen/FileDetailShow";
 import SearchScreen from "./search-screen/SearchScreen";
 import NewGroupScreen from "./new-group-screen/NewGroupScreen";
+import ProfileScreen from "./home-screen/ProfileScreen";
+import EditProfileScreen from "./home-screen/EditProfileScreen";
 
 const HomeStack = (props) => {
     const Stack = createNativeStackNavigator()
@@ -21,6 +23,8 @@ const HomeStack = (props) => {
             <Stack.Screen name={'FileShowScreen'} component={FileDetailShow}/>
             <Stack.Screen name={'SearchOthers'} component={SearchScreen}/>
             <Stack.Screen name={'NewGroupScreen'} component={NewGroupScreen}/>
+            <Stack.Screen name={'ProfileScreen'} component={ProfileScreen}/>
+            <Stack.Screen name={'EditProfileScreen'} component={EditProfileScreen}/>
         </Stack.Navigator>
     );
 };

@@ -11,8 +11,7 @@ export const login = async (email, password) => {
 };
 export const register = async (email, password) => {
   try {
-    const data = await auth().createUserWithEmailAndPassword(email, password);
-    console.log('data',data)
+    return await auth().createUserWithEmailAndPassword(email, password);
   } catch (e) {
     console.log("Register error:", e);
   }
