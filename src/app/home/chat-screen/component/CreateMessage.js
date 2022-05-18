@@ -12,7 +12,7 @@ import { ChooseFileLaunchCamera, ChooseFileLaunchLibrary } from "../../../../hel
 
 const CreateMessage = (props) => {
   const { user } = useContext(AppContext);
-  const { setListMessages, listMessages } = props;
+  const { roomInfo } = props;
   const [valueText, setValueText] = useState("");
   const onChangeMessage = (text) => {
     setValueText(text);
@@ -26,7 +26,7 @@ const CreateMessage = (props) => {
         type: "text",
         user: user.uid,
       };
-      createNewMessage("gSKawbVoW8WfS6DlNlgu", newMessage);
+      createNewMessage(roomInfo.roomId, newMessage);
       setValueText("");
       Keyboard.dismiss();
       // const newListMessage = [...listMessages];
@@ -44,7 +44,7 @@ const CreateMessage = (props) => {
       type: "image",
       user: user.uid,
     };
-    await createNewMessage("gSKawbVoW8WfS6DlNlgu", newMessage);
+    await createNewMessage(roomInfo.roomId, newMessage);
   };
   const onSubmitVideoMessage = async (url) => {
     const now = new Date();
@@ -54,7 +54,7 @@ const CreateMessage = (props) => {
       type: "video",
       user: user.uid,
     };
-    await createNewMessage("gSKawbVoW8WfS6DlNlgu", newMessage);
+    await createNewMessage(roomInfo.roomId, newMessage);
   };
   return (
     <View style={style.component}>

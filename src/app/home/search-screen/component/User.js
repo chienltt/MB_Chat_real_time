@@ -8,7 +8,9 @@ const User = (props) => {
 
     return (
         <TouchableOpacity style={style.wrap_box} onPress={()=>{
-            // navigation.navigate('ChatScreen',roomInfo)
+            navigation.navigate('ProfileScreen', {
+                userId:userInfo.userId
+            })
         }}>
             <View style={style.wrap}>
                 <View style={style.avatar}>

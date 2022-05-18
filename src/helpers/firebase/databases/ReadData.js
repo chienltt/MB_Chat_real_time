@@ -59,6 +59,26 @@ export const getListUserRoomChats = async (userId) => {
         });
     return listRoomData;
 };
+
+export const checkRoomExistsByMembers = async (otherId,userId)=>{
+    let room =[]
+    console.log('okdcumay',[userId,otherId])
+    await firestore().collection("Chatrooms")
+        .where("type","==","basic")
+        .where("members", "array-contains", userId)
+        .get().then((querySnapshot) => {
+            querySnapshot.forEach(function (doc) {
+                room.push({
+                    ...doc.data(),
+                    roomId:doc.id
+                });
+                console.log('okvcl',room)
+            });
+        });
+    console.log('okvcl',room)
+    return room
+}
+
 export const searchUser = async (searchValue) => {
     const searchTerm = searchValue.toLowerCase();
     const strlength = searchTerm.length;
@@ -73,8 +93,10 @@ export const searchUser = async (searchValue) => {
         .where('name', '<', endCode)
         .get().then((querySnapshot) => {
             querySnapshot.forEach(snapshot => {
-                console.log('okok', snapshot.data())
-                data.push(snapshot.data());
+                data.push({
+                    ...snapshot.data(),
+                    userId:snapshot.id
+                });
             });
         });
     return data;

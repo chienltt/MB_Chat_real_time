@@ -13,9 +13,12 @@ import avatar from './image/avatar.png';
 import firestore from '@react-native-firebase/firestore';
 // import PostCard from '../components/PostCard';
 import AppContext from "../../AppContext";
+import {checkRoomExistsByMembers} from "../../../helpers/firebase/databases/ReadData";
+import {createNewRoomChat} from "../../../helpers/firebase/databases/WriteData";
 
 
 const ProfileScreen = ({navigation, route}) => {
+    console.log('okok1',route.params)
     const {user, logout} = useContext(AppContext);
 
     const [loading, setLoading] = useState(true);
@@ -40,17 +43,35 @@ const ProfileScreen = ({navigation, route}) => {
         setLoading(!loading);
     }, []);
 
+    const onPressMessage = async ()=>{
+        const roomInfo = await checkRoomExistsByMembers(route.params.userId,user.uid)
+        if(roomInfo){
+            // navigation.navigate('ChatScreen', roomInfo)
+            console.log('okokcoroi',roomInfo)
+        }
+        // else {
+        //     const newRoom = {
+        //         name:userData.name,
+        //         avatar:userData.avatar,
+        //         type:'basic',
+        //         members:[user.uid,route.params.userId]
+        //     }
+        //     console.log('okokchayroi')
+        //     const newRoomInfo =await createNewRoomChat(newRoom)
+        //     if(newRoomInfo) navigation.navigate('ChatScreen', newRoomInfo)
+        // }
+    }
 
     return (
         <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+            <TouchableOpacity onPress={()=>navigation.goBack()}><Text>Back</Text></TouchableOpacity>
             <ScrollView
                 style={styles.container}
                 contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}
                 showsVerticalScrollIndicator={false}>
                 <Image
                     style={styles.userImg}
-                    // source={(userData ? {uri: userData.userImg} : avatar)}
-                    source={(avatar)}
+                    source={(userData ?userData.avatar ? {uri: userData.avatar} : avatar : avatar)}
                 />
                 <Text style={styles.userName}>{userData ? userData.name || 'Test' : 'Test'}</Text>
                 {/* <Text>{route.params ? route.params.userId : user.uid}</Text> */}
@@ -60,8 +81,8 @@ const ProfileScreen = ({navigation, route}) => {
                 <View style={styles.userBtnWrapper}>
                     {route.params ? (
                         <>
-                            <TouchableOpacity style={styles.userBtn} onPress={() => {}}>
-                                <Text style={styles.userBtnTxt}>Message</Text>
+                            <TouchableOpacity style={styles.userBtn} onPress={() => onPressMessage()}>
+                                <Text style={styles.userBtnTxt}>Message1</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.userBtn} onPress={() => {}}>
                                 <Text style={styles.userBtnTxt}>Follow</Text>

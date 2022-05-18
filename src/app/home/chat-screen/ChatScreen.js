@@ -96,7 +96,7 @@ const ChatScreen = (props)=>{
       <View style={[style.message_show]}>
         <MessageShow navigation={navigation} listMessages={listMessages} setListMessages={setListMessages} roomInfo={roomInfo}/>
       </View>
-      <CreateMessage listMessages={listMessages} setListMessages={setListMessages}/>
+      <CreateMessage roomInfo={roomInfo}/>
     </View>
   )
 }

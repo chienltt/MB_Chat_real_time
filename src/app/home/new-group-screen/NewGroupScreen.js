@@ -31,8 +31,8 @@ const NewGroupScreen = (props)=>{
     }
     const onselectUser = async (user)=>{
         setDataSelected((prev)=>[...prev,user])
-        const newValueSearch = value.split(',')[0]
-        console.log('okok',newValueSearch)
+        // const newValueSearch = value.split(',')[0]
+        // console.log('okok',newValueSearch)
     }
     const onUnSelectUser= async (user)=>{
         const newDataSelected=dataSelected.map(_user=>{

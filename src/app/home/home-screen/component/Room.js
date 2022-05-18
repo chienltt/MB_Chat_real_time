@@ -17,9 +17,9 @@ const Room = (props) => {
                 <View style={style.info_wrap}>
                     <View style={style.info}>
                         <Text numberOfLines={1} style={style.name}>{roomInfo.name}</Text>
-                        {roomInfo.lastMessage.type === 'text' ?
+                        {roomInfo.lastMessage ? roomInfo.lastMessage.type === 'text' ?
                             <Text numberOfLines={1} style={style.message}>{roomInfo.lastMessage.content}</Text> :
-                            <Text numberOfLines={1} style={style.message}>send a file</Text>}
+                            <Text numberOfLines={1} style={style.message}>send a file</Text> : <Text>empty</Text>}
                     </View>
                 </View>
             </View>
