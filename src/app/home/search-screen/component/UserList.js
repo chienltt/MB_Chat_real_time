@@ -3,11 +3,10 @@ import React from "react";
 import User from "./User";
 
 const UserList = (props)=>{
-    const {navigation,data} = props
+    const {navigation,data,selectUser,unSelectUser} = props
     return(
         <ScrollView style={style.component}>
             {data.map((user,index)=>{
-                console.log('user',user)
                 return <User navigation={navigation} key={index} userInfo={user}/>
             })}
         </ScrollView>

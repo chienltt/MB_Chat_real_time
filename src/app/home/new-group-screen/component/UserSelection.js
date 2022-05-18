@@ -1,15 +1,22 @@
-import React from "react";
-import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
+import React, {useState} from "react";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Avatar from "../../../../helpers/Avatar";
+import Icon from "react-native-vector-icons/FontAwesome";
 
-const User = (props) => {
-    const {navigation} = props
+const UserSelection=(props)=>{
+    const {unSelectUser,selectUser} = props
     const userInfo = props.userInfo;
+    const [isSelected,setIsSelected] = useState(userInfo.selected)
+
+    const onClickUser = ()=>{
+        userInfo.selected=!userInfo.selected
+        if(isSelected=== true) unSelectUser(userInfo)
+        else selectUser(userInfo)
+        setIsSelected(prev=> !prev)
+    }
 
     return (
-        <TouchableOpacity style={style.wrap_box} onPress={()=>{
-            // navigation.navigate('ChatScreen',roomInfo)
-        }}>
+        <TouchableOpacity style={style.wrap_box} onPress={()=>onClickUser()}>
             <View style={style.wrap}>
                 <View style={style.avatar}>
                     <Avatar size={60} url={userInfo.avatar} />
@@ -17,13 +24,13 @@ const User = (props) => {
                 <View style={style.info_wrap}>
                     <View style={style.info}>
                         <Text numberOfLines={1} style={style.name}>{userInfo.name}</Text>
-                        {/*<Text numberOfLines={1} style={style.message}>{roomInfo.last_message}</Text>*/}
                     </View>
+                    {isSelected?<Icon size={30} name={'check-circle'}/>:<View/>}
                 </View>
             </View>
         </TouchableOpacity>
     );
-};
+}
 const style = StyleSheet.create({
     wrap_box: {
         height: 70,
@@ -45,6 +52,9 @@ const style = StyleSheet.create({
         flex: 5,
         // backgroundColor:"#75FF33",
         fontSize:20,
+        justifyContent:"space-between",
+        flexDirection:"row",
+        alignItems:"center"
     },
     info:{
         paddingVertical:5,
@@ -62,4 +72,4 @@ const style = StyleSheet.create({
         color:'#000000'
     }
 });
-export default User
+export default UserSelection

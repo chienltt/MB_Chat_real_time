@@ -16,11 +16,10 @@ const ChatScreen = (props)=>{
   const [messageShowSize, setMessageShowSize] = useState(8)
   const [listMessages,setListMessages] = useState([])
   const [messageRealtime,setMessageRealtime] = useState()
-  const roomId = 'gSKawbVoW8WfS6DlNlgu'
+  const roomId = roomInfo.roomId
   let initStateData = true
   useEffect(()=>{
     const getListMessagesInit= async ()=>{
-      const roomId='gSKawbVoW8WfS6DlNlgu'
       const data = await getMessages(roomId)
       const listMessages=data.map(message=>{
         const date=message.createdTime.toDate()

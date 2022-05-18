@@ -19,7 +19,7 @@ const HomeScreen = (props) => {
                     {/*<Text style={style.topHeaderElement} >Chat room</Text>*/}
                     <Button style={style.topHeaderElement} title={'tim kiem ...'}
                             onPress={() => navigation.navigate('SearchOthers')}/>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={()=>navigation.navigate('NewGroupScreen')}>
                       <EntypoIcon style={style.topHeaderElement} name={'new-message'} />
                     </TouchableOpacity>
                 </View>
