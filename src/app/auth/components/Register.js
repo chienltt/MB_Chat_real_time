@@ -51,6 +51,7 @@ const Register = ({navigation}) => {
         }
         if (!userEmail.match(/.+@.+/)) {
             alert('Invalid email')
+            return;
         }
         if (!userDescription) {
             alert('Please fill Description');
@@ -62,6 +63,7 @@ const Register = ({navigation}) => {
         }
         if (userPassword !== confirmPassword) {
             alert('Password and Confirm password not identical')
+            return;
         }
         //Show Loader
         setLoading(true);

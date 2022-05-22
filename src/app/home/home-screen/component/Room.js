@@ -28,6 +28,7 @@ const Room = (props) => {
                     </View>
                 </View>
             </View>
+            <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
         </TouchableOpacity>
     );
 };
@@ -54,13 +55,13 @@ const style = StyleSheet.create({
         fontSize: 20,
     },
     info: {
-        paddingVertical: 5,
+        paddingBottom: 5,
         flex: 1,
         justifyContent: 'space-between'
     },
     message: {
         fontSize: 18,
-        color: '#000000'
+        color: '#666'
     },
     message_bold:{
         fontSize: 18,
