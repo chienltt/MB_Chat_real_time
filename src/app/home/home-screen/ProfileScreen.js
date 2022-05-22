@@ -15,6 +15,7 @@ import firestore from '@react-native-firebase/firestore';
 import AppContext from "../../AppContext";
 import {checkRoomExistsByMembers} from "../../../helpers/firebase/databases/ReadData";
 import {createNewRoomChat} from "../../../helpers/firebase/databases/WriteData";
+import Icon from "react-native-vector-icons/AntDesign";
 
 
 const ProfileScreen = ({navigation, route}) => {
@@ -48,7 +49,6 @@ const ProfileScreen = ({navigation, route}) => {
     const onPressMessage = async () => {
         const roomInfo = await checkRoomExistsByMembers(route.params.userId, user.uid)
         if (roomInfo.length) {
-            console.log('okokco roi',roomInfo)
             navigation.navigate('ChatScreen', roomInfo[0])
         } else {
             const newRoom = {
@@ -80,8 +80,12 @@ const ProfileScreen = ({navigation, route}) => {
     return (
         <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
 
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Icon size={25} style={styles.icon_goback} name={'left'}/>
+                </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity onPress={() => navigation.goBack()}><Text>Back</Text></TouchableOpacity>
             <ScrollView
                 style={styles.container}
                 contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}
@@ -183,7 +187,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingTop: 60,
+        paddingTop: 40,
         // paddingHorizontal: 20,
     },
     userImg: {
@@ -261,5 +265,17 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingTop: 20,
         flexDirection: 'row',
+    },
+    icon_goback: {
+        paddingRight: 5,
+    },
+    header: {
+        // flex: 1,
+        // flexDirection: 'row',
+        // alignItems: "center",
+        height: 40,
+        paddingTop: 10,
+
+        backgroundColor: '#fff',
     },
 });

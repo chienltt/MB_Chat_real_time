@@ -21,12 +21,14 @@ const User = (props) => {
                     </View>
                 </View>
             </View>
+            <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
+
         </TouchableOpacity>
     );
 };
 const style = StyleSheet.create({
     wrap_box: {
-        height: 70,
+        height: 80,
         // backgroundColor: "#ff6d6d",
         padding: 5,
         marginBottom: 5,
@@ -34,7 +36,6 @@ const style = StyleSheet.create({
     wrap: {
         flex: 1,
         flexDirection: "row",
-        // backgroundColor: "#ff6d6d",
     },
     avatar: {
         flex: 1,

@@ -20,7 +20,7 @@ const Message = (props) => {
             }>
               {timeVisible === true ? <Text style={{ color: "#ffffff" }}> {messageInfo.createdTimeFormated} </Text> :
                 <View />}
-              <Text style={style.text_message}>
+              <Text style={[style.text_message, messageInfo.isOwn === false ? style.text_message_notOwn : style.text_message_own]}>
                 {messageInfo.content}
               </Text>
             </TouchableOpacity>
@@ -66,12 +66,18 @@ const style = StyleSheet.create({
   },
   text_message: {
     width: "100%",
-    color: "#FFFFFF",
     fontSize: 20,
     paddingVertical: 3,
     paddingHorizontal: 6,
-    backgroundColor: "#2D2A27",
     borderRadius: 10,
+  },
+  text_message_own: {
+    backgroundColor: "#3c6bff",
+    color: "#fff",
+  },
+  text_message_notOwn: {
+    color: "black",
+    backgroundColor: "lightgrey",
   },
   image_message_wrap: {
     width: "45%",

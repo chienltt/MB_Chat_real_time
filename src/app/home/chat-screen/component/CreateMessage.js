@@ -58,6 +58,7 @@ const CreateMessage = (props) => {
   };
   return (
     <View style={style.component}>
+      {/*<View style={{height: 3, backgroundColor: 'lightgrey', width: '100%', position: 'absolute', top: 0}}/>*/}
       <TouchableOpacity onPress={async () => {
         const { url, response } = await ChooseFileLaunchLibrary();
         console.log("response", response);
@@ -65,12 +66,12 @@ const CreateMessage = (props) => {
           await onSubmitImageMessage(url);
         else if (response.assets[0].type === "video/mpeg")
           await onSubmitVideoMessage(url);
-      }}><FontAwesomeIcon size={28} color={"#6AF111"} name={"folder"} /></TouchableOpacity>
+      }}><FontAwesomeIcon size={28} color={"#3c6bff"} name={"folder"} /></TouchableOpacity>
       <TouchableOpacity onPress={async () => {
         const url = await ChooseFileLaunchCamera();
         await onSubmitImageMessage(url);
       }
-      }><FontAwesomeIcon size={28} color={"#6AF111"} name={"camera"} /></TouchableOpacity>
+      }><FontAwesomeIcon size={28} color={"#3c6bff"} name={"camera"} /></TouchableOpacity>
       <TextInput
         value={valueText}
         style={style.text_input}
@@ -79,7 +80,7 @@ const CreateMessage = (props) => {
           onChangeMessage(text);
         }}
       />
-      <TouchableOpacity onPress={() => onSubmitMessage()}><IonIcon size={28} color={"#6AF111"}
+      <TouchableOpacity onPress={() => onSubmitMessage()}><IonIcon size={28} color={"#3c6bff"}
                                                                    name={"send"} /></TouchableOpacity>
     </View>
   );
@@ -89,7 +90,7 @@ const style = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: 50,
-    backgroundColor: "#685F56",
+    backgroundColor: "#bbb",
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-evenly",
@@ -97,7 +98,7 @@ const style = StyleSheet.create({
   text_input: {
     fontSize: 15,
     width: "50%",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#eee",
     borderRadius: 15,
     paddingLeft: 10,
   },

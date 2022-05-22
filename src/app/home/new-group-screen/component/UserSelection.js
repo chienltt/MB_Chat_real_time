@@ -28,12 +28,14 @@ const UserSelection=(props)=>{
                     {isSelected?<Icon size={30} name={'check-circle'}/>:<View/>}
                 </View>
             </View>
+            <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
+
         </TouchableOpacity>
     );
 }
 const style = StyleSheet.create({
     wrap_box: {
-        height: 70,
+        height: 80,
         // backgroundColor: "#ff6d6d",
         padding: 5,
         marginBottom: 5,
