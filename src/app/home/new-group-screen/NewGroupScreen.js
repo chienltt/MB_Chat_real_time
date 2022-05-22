@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {searchUser} from "../../../helpers/firebase/databases/ReadData";
 import Icon from "react-native-vector-icons/AntDesign";
 import UserList from "../search-screen/component/UserList";
@@ -45,7 +45,7 @@ const NewGroupScreen = (props)=>{
         setDataSelected(newDataSelected)
     }
     return (
-        <View style={style.wrap}>
+        <KeyboardAvoidingView style={style.wrap}>
             <View style={style.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Icon size={25} style={style.icon_goback} name={'left'}/>
@@ -66,7 +66,7 @@ const NewGroupScreen = (props)=>{
                 <UserListSelected dataSelected ={dataSelected} unSelectUser={onUnSelectUser}/>
                 <UserListSelection navigation={navigation} data={data} selectUser={onselectUser} unSelectUser={onUnSelectUser}/>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 const style = StyleSheet.create({

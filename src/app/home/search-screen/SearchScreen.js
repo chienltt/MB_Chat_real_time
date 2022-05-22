@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {StyleSheet, TextInput, TouchableOpacity, View} from "react-native";
+import {KeyboardAvoidingView, ScrollView, StyleSheet, TextInput, TouchableOpacity, View} from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import {searchUser} from "../../../helpers/firebase/databases/ReadData";
 import UserList from "./component/UserList";
@@ -22,25 +22,30 @@ const SearchScreen = (props) => {
         }
     }
     return (
-        <View style={style.wrap}>
+        <KeyboardAvoidingView style={style.wrap}>
+
             <View style={style.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Icon size={25} style={style.icon_goback} name={'left'}/>
-                </TouchableOpacity>
-                <View style={style.topSearchSection}>
-                    <TextInput
-                        style={{width: '100%'}}
-                        placeholder="Search"
-                        value={value}
-                        onChangeText={(value)=>onchangeSearchValue(value)}
-                    />
-                </View>
-            </View>
-            <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
-            <View style={style.body}>
-                <UserList navigation={navigation} data={data}/>
-            </View>
-        </View>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <Icon size={25} style={style.icon_goback} name={'left'}/>
+                        </TouchableOpacity>
+                        <View style={style.topSearchSection}>
+                            <TextInput
+                                style={{width: '100%'}}
+                                placeholder="Search"
+                                value={value}
+                                onChangeText={(value)=>onchangeSearchValue(value)}
+                            />
+                        </View>
+                    </View>
+                        <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
+                        <View style={style.body}>
+                            <UserList navigation={navigation} data={data}/>
+                        </View>
+
+
+
+        </KeyboardAvoidingView>
+
     )
 }
 const style = StyleSheet.create({
