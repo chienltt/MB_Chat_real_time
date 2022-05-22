@@ -9,6 +9,7 @@ import EntypoIcon from "react-native-vector-icons/Entypo";
 import AppContext from "../../AppContext";
 import RoomLists from "./component/RoomLists";
 import {getUserById} from "../../../helpers/firebase/databases/ReadData";
+import searchScreen from "../search-screen/SearchScreen";
 
 const HomeScreen = (props) => {
     const {navigation} = props
@@ -36,9 +37,9 @@ const HomeScreen = (props) => {
                     }}>
                         <Icon style={style.topHeaderElement} name={'user'}/>
                     </TouchableOpacity>
-                    {/*<Text style={style.topHeaderElement} >Chat room</Text>*/}
-                    <Button style={style.topHeaderElement} title={'tim kiem ...'}
-                            onPress={() => navigation.navigate('SearchOthers')}/>
+                    <View>
+                        <Text>Chat</Text>
+                    </View>
                     <TouchableOpacity onPress={()=>navigation.navigate('NewGroupScreen')}>
                       <EntypoIcon style={style.topHeaderElement} name={'new-message'} />
                     </TouchableOpacity>
@@ -51,6 +52,18 @@ const HomeScreen = (props) => {
                 {/*  />*/}
                 {/*</View>*/}
             </View>
+            <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
+
+            <TouchableOpacity style={style.userBtn} onPress={()=>{
+                navigation.navigate("SearchOthers", searchScreen);
+            }}>
+                <View
+                    style={style.buttonView}>
+                    <Icon style={style.topHeaderElement} name={'search1'}/>
+                    <Text style={style.buttonText}>Search</Text>
+                </View>
+            </TouchableOpacity>
+
             <View style={style.middle}>
                 <RoomLists navigation={navigation}/>
             </View>
@@ -60,7 +73,7 @@ const HomeScreen = (props) => {
 const style = StyleSheet.create({
     wrap: {
         flex: 1,
-        backgroundColor: '#550066'
+        backgroundColor: '#fff'
     },
     top: {
         flex: 1,
@@ -73,7 +86,7 @@ const style = StyleSheet.create({
     topHeaderElement: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#ffffff'
+        color: 'black'
     },
     topHeader: {
         flex: 1,
@@ -97,6 +110,25 @@ const style = StyleSheet.create({
         paddingLeft: 0,
         backgroundColor: '#fff',
 
+    },
+    userBtn: {
+        borderColor: '#666',
+        borderWidth: 2,
+        borderRadius: 100,
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        marginHorizontal: 5,
+        marginVertical: 10,
+        backgroundColor: '#aaa'
+    },
+    buttonView: {
+        flexDirection: 'row',
+    },
+    buttonText: {
+        fontSize: 13,
+        marginLeft: 10,
+        color: 'black',
+        opacity: 0.5,
     }
 })
 export default HomeScreen
