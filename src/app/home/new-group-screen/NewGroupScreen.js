@@ -52,6 +52,7 @@ const NewGroupScreen = (props)=>{
                 </TouchableOpacity>
                 <View style={style.topSearchSection}>
                     <TextInput
+                        style={{width: '100%'}}
                         placeholder="Search user"
                         value={value}
                         onChangeText={(value)=>onchangeSearchValue(value)}
