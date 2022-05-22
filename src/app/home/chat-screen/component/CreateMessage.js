@@ -26,7 +26,7 @@ const CreateMessage = (props) => {
         type: "text",
         user: user.uid,
       };
-      createNewMessage(roomInfo.roomId, newMessage);
+      await createNewMessage(roomInfo.roomId, newMessage,user.uid);
       setValueText("");
       Keyboard.dismiss();
       // const newListMessage = [...listMessages];
@@ -44,7 +44,7 @@ const CreateMessage = (props) => {
       type: "image",
       user: user.uid,
     };
-    await createNewMessage(roomInfo.roomId, newMessage);
+    await createNewMessage(roomInfo.roomId, newMessage,user.uid);
   };
   const onSubmitVideoMessage = async (url) => {
     const now = new Date();
@@ -54,7 +54,7 @@ const CreateMessage = (props) => {
       type: "video",
       user: user.uid,
     };
-    await createNewMessage(roomInfo.roomId, newMessage);
+    await createNewMessage(roomInfo.roomId, newMessage,user.uid);
   };
   return (
     <View style={style.component}>

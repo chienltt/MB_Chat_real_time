@@ -22,51 +22,72 @@ import firestore from '@react-native-firebase/firestore';
 import DatePicker from "react-native-date-picker";
 import avatar from "./image/avatar.png";
 
-const EditProfileScreen = () => {
+const EditProfileScreen = ({navigation,route}) => {
     const {user, logout} = useContext(AppContext);
     // const [image, setImage] = useState(null);
     // const [uploading, setUploading] = useState(false);
     // const [transferred, setTransferred] = useState(0);
-    const [userData, setUserData] = useState(null);
+    const [userData, setUserData] = useState(route.params.userData);
     const [showDatePicker, setShowDatePicker] = useState(false);
 
 
-    const getUser = async() => {
-        const currentUser = await firestore()
+    const getUser = async () => {
+        await firestore()
             .collection('Users')
-            .doc("FOajGnNk8K4CiLGyk4Ik")
+            .doc(userData.userId)
             .get()
             .then((documentSnapshot) => {
-                if( documentSnapshot.exists ) {
+                if (documentSnapshot.exists) {
                     let data = documentSnapshot.data();
                     // console.log('User Data1', data);
-                    setUserData({...data, dateOfBirth: new Date(data.dateOfBirth.seconds * 1000)});
+                    setUserData({...data});
                 }
             })
     }
 
-    const handleUpdate = async() => {
+    const handleUpdate = async () => {
         // let imgUrl = await uploadImage();
         //
         // if( imgUrl == null && userData.userImg ) {
         //     imgUrl = userData.userImg;
         // }
-
-        firestore()
-            .collection('Users')
-            .doc("FOajGnNk8K4CiLGyk4Ik")
-            .update({
-                'name': userData.name,
-                'description': userData.description,
-                'dateOfBirth': userData.dateOfBirth,
-            })
-            .then(() => {
-                console.log('User Updated!');
-                Alert.alert(
-                    'Profile Updated!',
-                    'Your profile has been updated successfully.'
-                );
-            })
+        if (userData.avatar) {
+            firestore()
+                .collection('Users')
+                .doc(userData.userId)
+                .update({
+                    'name': userData.name,
+                    'avatar': userData.avatar,
+                    'description': userData.description,
+                    'dateOfBirth': userData.dateOfBirth,
+                })
+                .then(() => {
+                    getUser()
+                    console.log('User Updated!');
+                    Alert.alert(
+                        'Profile Updated!',
+                        'Your profile has been updated successfully.'
+                    );
+                })
+        }
+        else {
+            firestore()
+                .collection('Users')
+                .doc(userData.userId)
+                .update({
+                    'name': userData.name,
+                    'description': userData.description,
+                    'dateOfBirth': userData.dateOfBirth,
+                })
+                .then(() => {
+                    getUser()
+                    console.log('User Updated!');
+                    Alert.alert(
+                        'Profile Updated!',
+                        'Your profile has been updated successfully.'
+                    );
+                })
+        }
     }
 
     // const uploadImage = async () => {
@@ -120,9 +141,9 @@ const EditProfileScreen = () => {
     //
     // };
 
-    useEffect(() => {
-        getUser();
-    }, []);
+    // useEffect(() => {
+    //     getUser();
+    // }, []);
 
     // const takePhotoFromCamera = () => {
     //     ImagePicker.openCamera({
@@ -184,7 +205,6 @@ const EditProfileScreen = () => {
     //     </View>
     // );
 
-    const bs = React.createRef();
     // const fall = new Animated.Value(1);
 
     return (
@@ -204,110 +224,120 @@ const EditProfileScreen = () => {
             {/*        margin: 20,*/}
             {/*        opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),*/}
             {/*    }}>*/}
-                <View style={{alignItems: 'center'}}>
-                    <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
-                        <View
-                            style={{
-                                height: 100,
-                                width: 100,
-                                borderRadius: 15,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}>
-                            <ImageBackground
-                                // source={{
-                                //     uri: image
-                                //         ? image
-                                //         : userData
-                                //             ? userData.userImg
-                                // }}
-                                source={(avatar)}
+            <TouchableOpacity onPress={()=>{navigation.goBack()}}><Text>back</Text></TouchableOpacity>
+            <View style={{alignItems: 'center'}}>
+                <TouchableOpacity>
+                    <View
+                        style={{
+                            height: 100,
+                            width: 100,
+                            borderRadius: 15,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                        <ImageBackground
+                            // source={{
+                            //     uri: image
+                            //         ? image
+                            //         : userData
+                            //             ? userData.userImg
+                            // }}
+                            source={(userData ? userData.avatar ? {uri: userData.avatar} : avatar : avatar)}
 
-                                style={{height: 100, width: 100}}
-                                imageStyle={{borderRadius: 15}}>
-                                <View
-                                    style={{
-                                        flex: 1,
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                    }}>
-                                    <MaterialCommunityIcons
-                                        name="camera"
-                                        size={35}
-                                        color="#fff"
-                                        style={{
-                                            opacity: 0.7,
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            borderWidth: 1,
-                                            borderColor: '#fff',
-                                            borderRadius: 10,
-                                        }}
-                                    />
-                                </View>
-                            </ImageBackground>
-                        </View>
-                    </TouchableOpacity>
-                    <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>
-                        {userData ? userData.name : ''}
-                    </Text>
-                    {/* <Text>{user.uid}</Text> */}
-                </View>
+                            style={{height: 100, width: 100}}
+                            imageStyle={{borderRadius: 15}}>
+                            {/*<View*/}
+                            {/*    style={{*/}
+                            {/*        flex: 1,*/}
+                            {/*        justifyContent: 'center',*/}
+                            {/*        alignItems: 'center',*/}
+                            {/*    }}>*/}
+                            {/*    <MaterialCommunityIcons*/}
+                            {/*        name="camera"*/}
+                            {/*        size={35}*/}
+                            {/*        color="#fff"*/}
+                            {/*        style={{*/}
+                            {/*            opacity: 0.7,*/}
+                            {/*            alignItems: 'center',*/}
+                            {/*            justifyContent: 'center',*/}
+                            {/*            borderWidth: 1,*/}
+                            {/*            borderColor: '#fff',*/}
+                            {/*            borderRadius: 10,*/}
+                            {/*        }}*/}
+                            {/*    />*/}
+                            {/*</View>*/}
+                        </ImageBackground>
+                    </View>
+                </TouchableOpacity>
+                <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>
+                    {userData ? userData.name : ''}
+                </Text>
+                {/* <Text>{user.uid}</Text> */}
+            </View>
 
-                <View style={styles.action}>
-                    <FontAwesome name="user-o" color="#333333" size={20} />
-                    <TextInput
-                        placeholder="Name"
-                        placeholderTextColor="#666666"
-                        autoCorrect={false}
-                        value={userData ? userData.name : ''}
-                        onChangeText={(txt) => setUserData({...userData, name: txt})}
-                        style={styles.textInput}
-                    />
-                </View>
-                <View style={styles.action}>
-                    <Ionicons name="ios-clipboard-outline" color="#333333" size={20} />
-                    <TextInput
-                        multiline
-                        numberOfLines={3}
-                        placeholder="About Me"
-                        placeholderTextColor="#666666"
-                        value={userData ? userData.description : ''}
-                        onChangeText={(txt) => setUserData({...userData, description: txt})}
-                        autoCorrect={true}
-                        style={[styles.textInput]}
-                    />
-                </View>
+            <View style={styles.action}>
+                <FontAwesome name="user-o" color="#333333" size={20}/>
+                <TextInput
+                    placeholder="Name"
+                    placeholderTextColor="#666666"
+                    autoCorrect={false}
+                    value={userData ? userData.name : ''}
+                    onChangeText={(txt) => setUserData({...userData, name: txt})}
+                    style={styles.textInput}
+                />
+            </View>
+            <View style={styles.action}>
+                <FontAwesome name="user-o" color="#333333" size={20}/>
+                <TextInput
+                    placeholder="Avatar url"
+                    placeholderTextColor="#666666"
+                    autoCorrect={false}
+                    value={userData ? userData.avatar : ''}
+                    onChangeText={(txt) => setUserData({...userData, avatar: txt})}
+                    style={styles.textInput}
+                />
+            </View>
+            <View style={styles.action}>
+                <Ionicons name="ios-clipboard-outline" color="#333333" size={20}/>
+                <TextInput
+                    multiline
+                    numberOfLines={3}
+                    placeholder="About Me"
+                    placeholderTextColor="#666666"
+                    value={userData ? userData.description : ''}
+                    onChangeText={(txt) => setUserData({...userData, description: txt})}
+                    autoCorrect={true}
+                    style={[styles.textInput]}
+                />
+            </View>
             <View style={styles.DateTimeContainer}>
-                <Button title="Date Of Birth" onPress={() => setShowDatePicker(true)} />
-                <Text style={styles.date_text}>{(function() {
-                        let dateBirth = userData ? userData.dateOfBirth : new Date();
-                        let dd = String(dateBirth.getDate()).padStart(2, '0');
-                        let mm = String(dateBirth.getMonth() + 1).padStart(2, '0');
-                        let yyyy = dateBirth.getFullYear();
-
-                        return dd + '/' + mm + '/' + yyyy;
+                <Button title="Date Of Birth" onPress={() => setShowDatePicker(true)}/>
+                <Text style={styles.date_text}>{(function () {
+                    let dateBirth = userData ? userData.dateOfBirth.toDate() : new Date();
+                    let dd = String(dateBirth.getDate()).padStart(2, '0');
+                    let mm = String(dateBirth.getMonth() + 1).padStart(2, '0');
+                    let yyyy = dateBirth.getFullYear();
+                    return dd + '/' + mm + '/' + yyyy;
 
                 })()}</Text>
                 <DatePicker
                     modal
                     open={showDatePicker}
-                    date={userData ? userData.dateOfBirth : new Date()}
+                    date={ new Date()}
                     mode="date"
                     onConfirm={(date) => {
                         setShowDatePicker(false)
-                        setUserData({...userData, dateOfBirth: date})
+                        setUserData({...userData, dateOfBirth: firestore.Timestamp.fromDate(date)})
                     }}
                     onCancel={() => {
                         setShowDatePicker(false)
-                        console.log(userData.dateOfBirth);
                     }}
                 />
             </View>
-            <TouchableOpacity style={styles.buttonContainer } onPress={handleUpdate}>
+            <TouchableOpacity style={styles.buttonContainer} onPress={handleUpdate}>
                 <Text style={styles.buttonText}>Update</Text>
             </TouchableOpacity>
-                {/*<FormButton buttonTitle="Update" onPress={handleUpdate} />*/}
+            {/*<FormButton buttonTitle="Update" onPress={handleUpdate} />*/}
             {/*</Animated.View>*/}
         </View>
     );

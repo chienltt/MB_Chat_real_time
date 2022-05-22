@@ -2,14 +2,17 @@ import React, {useContext} from "react";
 import {View, StyleSheet, Image, Text, TouchableOpacity} from "react-native";
 import Avatar from "../../../../helpers/Avatar";
 import AppContext from "../../../AppContext";
+import {checkSeen} from "../../../../helpers/firebase/databases/WriteData";
 
 const Room = (props) => {
     const {user,setIsChangeRoomList} = useContext(AppContext)
-    const {navigation} = props
+    const {navigation,getRoomList} = props
     const roomInfo = props.roomInfo;
+    console.log('checked',roomInfo.isChecked.includes(user.uid))
     return (
         <TouchableOpacity style={style.wrap_box} onPress={() => {
             setIsChangeRoomList(true)
+            checkSeen(roomInfo,user.uid,getRoomList)
             navigation.navigate('ChatScreen', roomInfo)
         }}>
             <View style={style.wrap}>
@@ -20,8 +23,8 @@ const Room = (props) => {
                     <View style={style.info}>
                         <Text numberOfLines={1} style={style.name}>{roomInfo.name[user.uid]}</Text>
                         {roomInfo.lastMessage ? roomInfo.lastMessage.type === 'text' ?
-                            <Text numberOfLines={1} style={style.message}>{roomInfo.lastMessage.content}</Text> :
-                            <Text numberOfLines={1} style={style.message}>send a file</Text> : <Text>empty</Text>}
+                            <Text numberOfLines={1} style={roomInfo.isChecked.includes(user.uid)===true?style.message:style.message_bold}>{roomInfo.lastMessage.content}</Text> :
+                            <Text numberOfLines={1} style={roomInfo.isChecked.includes(user.uid)===true?style.message:style.message_bold}>send a file</Text> : <Text>empty</Text>}
                     </View>
                 </View>
             </View>
@@ -58,6 +61,11 @@ const style = StyleSheet.create({
     message: {
         fontSize: 18,
         color: '#000000'
+    },
+    message_bold:{
+        fontSize: 18,
+        color: '#000000',
+        fontWeight:"700",
     },
     name: {
         fontSize: 20,

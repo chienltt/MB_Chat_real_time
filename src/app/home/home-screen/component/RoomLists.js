@@ -97,7 +97,7 @@ const RoomLists = (props) => {
     return (
         <ScrollView style={style.component}>
             {roomList ? roomList.map((room, index) => {
-                return <Room navigation={navigation} key={index} roomInfo={room}/>
+                return <Room navigation={navigation} key={index} roomInfo={room} getRoomList={getUserRoomList}/>
             }) : <View/>}
         </ScrollView>
     )

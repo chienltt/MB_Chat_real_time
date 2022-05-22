@@ -32,7 +32,10 @@ const ProfileScreen = ({navigation, route}) => {
             .then((documentSnapshot) => {
                 if (documentSnapshot.exists) {
                     console.log('User Data', documentSnapshot.data());
-                    setUserData(documentSnapshot.data());
+                    setUserData({
+                        ...documentSnapshot.data(),
+                        userId:route.params.userId
+                    });
                 }
             })
     }
@@ -108,7 +111,10 @@ const ProfileScreen = ({navigation, route}) => {
                             <TouchableOpacity
                                 style={styles.userBtn}
                                 onPress={() => {
-                                    navigation.navigate('EditProfileScreen');
+                                    navigation.navigate('EditProfileScreen', {
+                                        userData: userData,
+                                        getUser: getUser()
+                                    });
                                 }}>
                                 <Text style={styles.userBtnTxt}>Edit</Text>
                             </TouchableOpacity>
