@@ -19,7 +19,7 @@ export const createNewRoomChat = (newRoom) => {
     firestore().collection('Chatrooms')
         .add({
             name: newRoom.name,
-            avatar: newRoom.avatar,
+            avatar: newRoom.avatar?newRoom.avatar:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxo5wX-gV36xL6Lxd0aOQtSqGmZQzoDAe-hA&usqp=CAU",
             members: newRoom.members,
             membersObject: newRoom.membersObject,
             // lastMessage: null,
@@ -30,6 +30,25 @@ export const createNewRoomChat = (newRoom) => {
         console.log('create room chat: ', room.id)
         return room
     })
+}
+
+export const createNewGroup =async (newGroup)=>{
+    const now = new Date();
+    const newRoom = await firestore().collection('Chatrooms')
+        .add({
+            name: newGroup.name,
+            avatar:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0uOCz8P-VYPNKEVkFEC1lVnz_t42LtOrLeg&usqp=CAU",
+            members: newGroup.members,
+            // membersObject: newGroup.membersObject,
+            // lastMessage: null,
+            updateTime: now,
+            type: newGroup.type,
+            isChecked:[],
+        }).then((room) => {
+        console.log('create room chat: ', room.id)
+        return room
+    })
+    return newRoom
 }
 
 export const checkSeen = (roomInfo,userId,getRoomList)=>{

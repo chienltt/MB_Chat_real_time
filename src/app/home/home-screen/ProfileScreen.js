@@ -69,6 +69,7 @@ const ProfileScreen = ({navigation, route}) => {
             }
 
             const newRoomInfo = await createNewRoomChat(newRoom)
+            console.log('day nay',newRoomInfo)
             if (newRoomInfo) navigation.navigate('ChatScreen', newRoomInfo)
         }
     }

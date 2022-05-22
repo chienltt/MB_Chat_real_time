@@ -23,8 +23,10 @@ const NewGroupScreen = (props)=>{
             if(_data) {
                 _data.map(user => {
                     const isSelected = dataSelected.find(userSelected => userSelected.userId === user.userId)
-                    if (isSelected) user.selected = true
-                    user.selected = false
+                    if (isSelected) {
+                        user.selected = true
+                    }
+                    else user.selected = false
                 })
                 setData(_data)
             }
@@ -60,7 +62,7 @@ const NewGroupScreen = (props)=>{
                 </View>
             </View>
             <View style={style.body}>
-                <NewGroupButton userSelected={dataSelected} />
+                <NewGroupButton userSelected={dataSelected} navigation={navigation}/>
                 <UserListSelected dataSelected ={dataSelected} />
                 <UserListSelection navigation={navigation} data={data} selectUser={onselectUser} unSelectUser={onUnSelectUser}/>
             </View>

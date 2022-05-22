@@ -7,10 +7,9 @@ const UserSelection=(props)=>{
     const {unSelectUser,selectUser} = props
     const userInfo = props.userInfo;
     const [isSelected,setIsSelected] = useState(userInfo.selected)
-
     const onClickUser = ()=>{
         userInfo.selected=!userInfo.selected
-        if(isSelected=== true) unSelectUser(userInfo)
+        if(isSelected === true) unSelectUser(userInfo)
         else selectUser(userInfo)
         setIsSelected(prev=> !prev)
     }

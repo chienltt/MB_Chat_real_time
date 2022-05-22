@@ -32,17 +32,14 @@ export const getMessages = async (roomID) => {
         });
     return data;
 };
-export const getRoomChatsById = (ListRoomID) => {
-    const listRoomData = ListRoomID.map((id) => {
-        firestore().collection("Chatrooms").where("id", "==", id)
-            .orderBy("updateTime", "desc")
-            .get().then((querySnapshot) => {
-            querySnapshot.forEach(function (doc) {
-                listRoomData.push(doc.data());
-            });
-        });
-    });
-    return listRoomData;
+export const getRoomChatsById = async (RoomID) => {
+    let roomData = await firestore().collection("Chatrooms").doc(RoomID)
+        .get()
+    console.log('roomdata',roomData.id)
+    return {
+        ...roomData._data,
+        roomId:roomData.id
+    };
 };
 
 export const getListUserRoomChats = async (userId) => {
@@ -53,18 +50,18 @@ export const getListUserRoomChats = async (userId) => {
             querySnapshot.forEach(function (doc) {
                 listRoomData.push({
                     ...doc.data(),
-                    roomId:doc.id
+                    roomId: doc.id
                 });
             });
         });
     return listRoomData;
 };
 
-export const checkRoomExistsByMembers = async (otherId,userId)=>{
-    console.log("data",userId,otherId)
-    let room =[]
+export const checkRoomExistsByMembers = async (otherId, userId) => {
+    console.log("data", userId, otherId)
+    let room = []
     await firestore().collection("Chatrooms")
-        .where("type","==","basic")
+        .where("type", "==", "basic")
         .where(`membersObject.${userId}`, "==", true)
         .where(`membersObject.${otherId}`, "==", true)
         // .where("members","array-contains",otherId)
@@ -72,20 +69,18 @@ export const checkRoomExistsByMembers = async (otherId,userId)=>{
             querySnapshot.forEach(function (doc) {
                 room.push({
                     ...doc.data(),
-                    roomId:doc.id
+                    roomId: doc.id
                 });
-                console.log('okvcl',room)
+                console.log('okvcl', room)
             });
         });
     return room
 }
 
-export const getUserById = async (id)=>{
-    console.log('vcl id',id)
+export const getUserById = async (id) => {
     let data = await firestore().collection("Users")
         .doc(id)
         .get()
-    console.log("vcl data",data)
     return data._data;
 }
 
@@ -105,7 +100,7 @@ export const searchUser = async (searchValue) => {
             querySnapshot.forEach(snapshot => {
                 data.push({
                     ...snapshot.data(),
-                    userId:snapshot.id
+                    userId: snapshot.id
                 });
             });
         });
