@@ -34,7 +34,7 @@ const Room = (props) => {
 };
 const style = StyleSheet.create({
     wrap_box: {
-        height: 70,
+        height: 80,
         // backgroundColor: "#ff6d6d",
         padding: 5,
         marginBottom: 5,
@@ -51,13 +51,13 @@ const style = StyleSheet.create({
     },
     info_wrap: {
         flex: 5,
-        // backgroundColor:"#75FF33",
+        marginLeft: 10,
         fontSize: 20,
     },
     info: {
         paddingBottom: 5,
         flex: 1,
-        justifyContent: 'space-between'
+        justifyContent: 'center'
     },
     message: {
         fontSize: 18,
