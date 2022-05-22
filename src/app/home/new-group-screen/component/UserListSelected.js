@@ -3,9 +3,9 @@ import {ScrollView, Text, View, StyleSheet} from "react-native";
 import UserSelection from "./UserSelection";
 
 const UserListSelected = (props) => {
-    const {navigation, selectUser, unSelectUser, dataSelected} = props
+    const { dataSelected} = props
     return (
-        dataSelected ?
+        dataSelected.length ?
             <View style={style.component}>
                 {dataSelected.map((user, index) => {
                     return (
