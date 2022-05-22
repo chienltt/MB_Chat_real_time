@@ -105,7 +105,7 @@ const style = StyleSheet.create({
     container: {
         flex: 1,
         minHeight: '100%',
-        backgroundColor: '#000000'
+        backgroundColor: '#fff'
     },
     header: {
         flex: 1,

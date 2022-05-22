@@ -28,14 +28,14 @@ const SearchScreen = (props) => {
                     <Icon size={25} style={style.icon_goback} name={'left'}/>
                 </TouchableOpacity>
                 <View style={style.topSearchSection}>
-                    <Icon style={{padding: 10}} name={'search1'}/>
                     <TextInput
-                        placeholder="search"
+                        placeholder="Search"
                         value={value}
                         onChangeText={(value)=>onchangeSearchValue(value)}
                     />
                 </View>
             </View>
+            <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
             <View style={style.body}>
                 <UserList navigation={navigation} data={data}/>
             </View>
@@ -52,7 +52,7 @@ const style = StyleSheet.create({
         alignItems: "center",
         height: 20,
         minHeight: 10,
-        backgroundColor: '#2E8C2E',
+        backgroundColor: '#fff',
     },
     topSearchSection: {
         flex: 1,
@@ -60,6 +60,7 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
+        marginLeft: 20,
         backgroundColor: '#fff'
     },
     body:{

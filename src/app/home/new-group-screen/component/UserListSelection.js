@@ -15,7 +15,7 @@ const style = StyleSheet.create({
     component: {
         paddingVertical:5,
         paddingHorizontal:3,
-        backgroundColor:'#DBFF33'
+        backgroundColor:'#fff'
     }
 })
 export default UserListSelection

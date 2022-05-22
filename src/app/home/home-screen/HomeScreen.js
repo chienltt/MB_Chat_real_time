@@ -10,6 +10,7 @@ import AppContext from "../../AppContext";
 import RoomLists from "./component/RoomLists";
 import {getUserById} from "../../../helpers/firebase/databases/ReadData";
 import searchScreen from "../search-screen/SearchScreen";
+import Avatar from "../../../helpers/Avatar";
 
 const HomeScreen = (props) => {
     const {navigation} = props
@@ -32,16 +33,17 @@ const HomeScreen = (props) => {
         <View style={style.wrap}>
             <View style={style.top}>
                 <View style={style.topHeader}>
-                    <TouchableOpacity onPress={()=>{
+                    <TouchableOpacity style={style.touchable} onPress={()=>{
                         navigation.navigate("ProfileScreen",userInfo)
                     }}>
                         <Icon style={style.topHeaderElement} name={'user'}/>
                     </TouchableOpacity>
                     <View>
-                        <Text>Chat</Text>
+                        <Text style={style.headerText}>Chats</Text>
                     </View>
-                    <TouchableOpacity onPress={()=>navigation.navigate('NewGroupScreen')}>
-                      <EntypoIcon style={style.topHeaderElement} name={'new-message'} />
+                    <TouchableOpacity style={style.touchable} onPress={()=>navigation.navigate('NewGroupScreen')}>
+                        <Avatar size={30} url={"https://static.vecteezy.com/system/resources/thumbnails/000/550/535/small/user_icon_007.jpg"} />
+
                     </TouchableOpacity>
                 </View>
                 {/*<View style={style.topSearchSection}>*/}
@@ -73,7 +75,7 @@ const HomeScreen = (props) => {
 const style = StyleSheet.create({
     wrap: {
         flex: 1,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
     },
     top: {
         flex: 1,
@@ -93,6 +95,11 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+    },
+    headerText: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: 'black',
     },
     topSearchSection: {
         flex: 1,
@@ -119,7 +126,7 @@ const style = StyleSheet.create({
         paddingHorizontal: 12,
         marginHorizontal: 5,
         marginVertical: 10,
-        backgroundColor: '#aaa'
+        backgroundColor: '#eeeeee'
     },
     buttonView: {
         flexDirection: 'row',
@@ -129,6 +136,12 @@ const style = StyleSheet.create({
         marginLeft: 10,
         color: 'black',
         opacity: 0.5,
-    }
+    },
+    touchable: {
+        borderRadius: 100,
+        backgroundColor: '#eee',
+        padding: 5,
+        margin: 10,
+    },
 })
 export default HomeScreen
