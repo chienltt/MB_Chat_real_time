@@ -17,7 +17,7 @@ const Room = (props) => {
         }}>
             <View style={style.wrap}>
                 <View style={style.avatar}>
-                    <Avatar size={60} url={roomInfo.avatar}/>
+                    <Avatar size={60} url={roomInfo.avatars[user.uid]}/>
                 </View>
                 <View style={style.info_wrap}>
                     <View style={style.info}>

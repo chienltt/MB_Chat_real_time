@@ -29,7 +29,7 @@ const SearchScreen = (props) => {
                 </TouchableOpacity>
                 <View style={style.topSearchSection}>
                     <TextInput
-                        placeholder="Search"
+                        placeholder="Search user or group ..."
                         value={value}
                         onChangeText={(value)=>onchangeSearchValue(value)}
                     />

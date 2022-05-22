@@ -6,12 +6,13 @@ import Icon from "react-native-vector-icons/FontAwesome";
 const UserSelection=(props)=>{
     const {unSelectUser,selectUser} = props
     const userInfo = props.userInfo;
-    const [isSelected,setIsSelected] = useState(userInfo.selected)
+    // const [isSelected,setIsSelected] = useState(userInfo.selected)
     const onClickUser = ()=>{
-        userInfo.selected=!userInfo.selected
-        if(isSelected === true) unSelectUser(userInfo)
-        else selectUser(userInfo)
-        setIsSelected(prev=> !prev)
+        selectUser(userInfo)
+        // userInfo.selected=!userInfo.selected
+        // if(isSelected === true) unSelectUser(userInfo)
+        // else selectUser(userInfo)
+        // setIsSelected(prev=> !prev)
     }
 
     return (
@@ -24,7 +25,7 @@ const UserSelection=(props)=>{
                     <View style={style.info}>
                         <Text numberOfLines={1} style={style.name}>{userInfo.name}</Text>
                     </View>
-                    {isSelected?<Icon size={30} name={'check-circle'}/>:<View/>}
+                    {/*{isSelected?<Icon size={30} name={'check-circle'}/>:<View/>}*/}
                 </View>
             </View>
             <View style={{height: 3, backgroundColor: 'lightgrey'}}/>

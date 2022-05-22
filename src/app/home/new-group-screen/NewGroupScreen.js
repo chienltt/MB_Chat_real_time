@@ -21,25 +21,25 @@ const NewGroupScreen = (props)=>{
             setValue(value)
             const _data = await searchUser(value)
             if(_data) {
-                _data.map(user => {
-                    const isSelected = dataSelected.find(userSelected => userSelected.userId === user.userId)
-                    if (isSelected) {
-                        user.selected = true
-                    }
-                    else user.selected = false
-                })
+                // _data.map(user => {
+                //     const isSelected = dataSelected.find(userSelected => userSelected.userId === user.userId)
+                //     // if (isSelected) {
+                //     //     user.selected = true
+                //     // }
+                //     // else user.selected = false
+                // })
                 setData(_data)
             }
         }
     }
     const onselectUser = async (user)=>{
+        if(dataSelected.includes(user)===false)
         setDataSelected((prev)=>[...prev,user])
         // const newValueSearch = value.split(',')[0]
         // console.log('okok',newValueSearch)
     }
     const onUnSelectUser= async (user)=>{
         const newDataSelected=dataSelected.filter(userSelected=>userSelected.userId!== user.userId)
-        console.log('gia tri',newDataSelected)
         // const index = dataSelected.filter((userSelected,index)=>{
         //     if (userSelected.id === user.id) return index
         // })

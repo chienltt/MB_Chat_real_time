@@ -57,6 +57,10 @@ const ProfileScreen = ({navigation, route}) => {
                     [route.params.userId]: userInfo.name,
                 },
                 avatar: userData.avatar,
+                avatars:{
+                    [user.uid]: userData.avatar,
+                    [route.params.userId]: userInfo.avatar,
+                },
                 type: 'basic',
                 membersObject: {
                     [user.uid]: true,
