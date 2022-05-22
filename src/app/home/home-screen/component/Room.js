@@ -1,13 +1,15 @@
-import React from "react";
+import React, {useContext} from "react";
 import {View, StyleSheet, Image, Text, TouchableOpacity} from "react-native";
 import Avatar from "../../../../helpers/Avatar";
+import AppContext from "../../../AppContext";
 
 const Room = (props) => {
+    const {user,setIsChangeRoomList} = useContext(AppContext)
     const {navigation} = props
     const roomInfo = props.roomInfo;
-    console.log("da vao", roomInfo.avatar)
     return (
         <TouchableOpacity style={style.wrap_box} onPress={() => {
+            setIsChangeRoomList(true)
             navigation.navigate('ChatScreen', roomInfo)
         }}>
             <View style={style.wrap}>
@@ -16,7 +18,7 @@ const Room = (props) => {
                 </View>
                 <View style={style.info_wrap}>
                     <View style={style.info}>
-                        <Text numberOfLines={1} style={style.name}>{roomInfo.name}</Text>
+                        <Text numberOfLines={1} style={style.name}>{roomInfo.name[user.uid]}</Text>
                         {roomInfo.lastMessage ? roomInfo.lastMessage.type === 'text' ?
                             <Text numberOfLines={1} style={style.message}>{roomInfo.lastMessage.content}</Text> :
                             <Text numberOfLines={1} style={style.message}>send a file</Text> : <Text>empty</Text>}

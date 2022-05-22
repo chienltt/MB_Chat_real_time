@@ -5,6 +5,7 @@ import AppContext from "./AppContext";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeStack from "./home/HomeStack";
 import AuthStack from "./auth/AuthStack";
+import {getUserById} from "../helpers/firebase/databases/ReadData";
 const Routes = (props)=>{
   const {user,setUser,logout} = useContext(AppContext)
   const [loading,setLoading] = useState(true)

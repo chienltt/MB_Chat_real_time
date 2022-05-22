@@ -61,11 +61,13 @@ export const getListUserRoomChats = async (userId) => {
 };
 
 export const checkRoomExistsByMembers = async (otherId,userId)=>{
+    console.log("data",userId,otherId)
     let room =[]
-    console.log('okdcumay',[userId,otherId])
     await firestore().collection("Chatrooms")
         .where("type","==","basic")
-        .where("members", "array-contains", userId)
+        .where(`membersObject.${userId}`, "==", true)
+        .where(`membersObject.${otherId}`, "==", true)
+        // .where("members","array-contains",otherId)
         .get().then((querySnapshot) => {
             querySnapshot.forEach(function (doc) {
                 room.push({
@@ -75,8 +77,16 @@ export const checkRoomExistsByMembers = async (otherId,userId)=>{
                 console.log('okvcl',room)
             });
         });
-    console.log('okvcl',room)
     return room
+}
+
+export const getUserById = async (id)=>{
+    console.log('vcl id',id)
+    let data = await firestore().collection("Users")
+        .doc(id)
+        .get()
+    console.log("vcl data",data)
+    return data._data;
 }
 
 export const searchUser = async (searchValue) => {
@@ -89,8 +99,8 @@ export const searchUser = async (searchValue) => {
     await firestore().collection("Users")
         // .where("name", "array-contains",searchValue)
         // .orderBy("name", "asc")
-        .where('name', '>=', searchTerm)
-        .where('name', '<', endCode)
+        .where('nametolowercase', '>=', searchTerm)
+        .where('nametolowercase', '<', endCode)
         .get().then((querySnapshot) => {
             querySnapshot.forEach(snapshot => {
                 data.push({

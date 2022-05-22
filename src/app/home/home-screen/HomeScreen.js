@@ -8,14 +8,34 @@ import Icon from 'react-native-vector-icons/AntDesign'
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import AppContext from "../../AppContext";
 import RoomLists from "./component/RoomLists";
+import {getUserById} from "../../../helpers/firebase/databases/ReadData";
 
 const HomeScreen = (props) => {
     const {navigation} = props
+    const {user,userInfo,setUserInfo} = useContext(AppContext)
+    const checkAndSetUserInfo = async ()=> {
+        if ((!userInfo)||(userInfo.userId!==user.uid)) {
+            const _userInfo = await getUserById(user.uid)
+            if (_userInfo) {
+                setUserInfo({
+                    ..._userInfo,
+                    userId:user.uid
+                })
+            }
+        }
+    }
+    useEffect(()=>{
+        checkAndSetUserInfo()
+    },[user])
     return (
         <View style={style.wrap}>
             <View style={style.top}>
                 <View style={style.topHeader}>
-                    <Icon style={style.topHeaderElement} name={'user'}/>
+                    <TouchableOpacity onPress={()=>{
+                        navigation.navigate("ProfileScreen",userInfo)
+                    }}>
+                        <Icon style={style.topHeaderElement} name={'user'}/>
+                    </TouchableOpacity>
                     {/*<Text style={style.topHeaderElement} >Chat room</Text>*/}
                     <Button style={style.topHeaderElement} title={'tim kiem ...'}
                             onPress={() => navigation.navigate('SearchOthers')}/>

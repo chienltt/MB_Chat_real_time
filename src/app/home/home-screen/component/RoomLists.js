@@ -3,6 +3,7 @@ import {View, StyleSheet, ScrollView} from "react-native";
 import Room from "./Room";
 import AppContext from "../../../AppContext";
 import {getListUserRoomChats} from "../../../../helpers/firebase/databases/ReadData";
+import firestore from "@react-native-firebase/firestore";
 
 const datatest = [
     {
@@ -60,16 +61,39 @@ const datatest = [
 ]
 const RoomLists = (props) => {
     const {navigation} = props
-    const {user} = useContext(AppContext)
+    const {user,isChangeRoomList,setIsChangeRoomList} = useContext(AppContext)
     const [roomList, setRoomList] = useState([])
     const getUserRoomList = async () => {
-        console.log("okvcl",user.uid)
-        const _data = await getListUserRoomChats(user.uid)
-        if (_data) setRoomList(_data)
+        // if(isChangeRoomList===true) {
+            const _data = await getListUserRoomChats(user.uid)
+            if (_data) setRoomList(_data)
+        //     setIsChangeRoomList(false)
+        // }
     }
-    useEffect(() => {
+    useEffect(()=>{
         getUserRoomList()
     },[])
+
+    useEffect(() => {
+        const getRoomListRealTime = async ()=>{
+            let data= []
+            await firestore()
+                .collection('Chatrooms')
+                .orderBy("updateTime", "desc")
+                .limit(1)
+                .onSnapshot((querySnapshot)=> {
+                    // console.log('du lieu vao')
+                    // querySnapshot.forEach(function (doc) {
+                    //     data.push(doc.data());
+                    //     console.log('du lieu',doc.data())
+                    // });
+                    console.log('co thay doi')
+                    getUserRoomList()
+                })
+        }
+        getRoomListRealTime()
+    },[user.uid])
+
     return (
         <ScrollView style={style.component}>
             {roomList ? roomList.map((room, index) => {

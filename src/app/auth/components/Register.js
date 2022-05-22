@@ -15,8 +15,8 @@ import {
 } from 'react-native';
 import {createNewUserInfo} from "../../../helpers/firebase/databases/WriteData";
 
-const Register = (props) => {
-    const { register } = useContext(AppContext);
+const Register = ({navigation}) => {
+    const {register} = useContext(AppContext);
 
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
@@ -65,20 +65,19 @@ const Register = (props) => {
         }
         //Show Loader
         setLoading(true);
-        await register(userEmail, userPassword)
-            .then((key) => {
-                const dataToSend = {
-                    userId: key,
-                    name: userName,
-                    email: userEmail,
-                    dateOfBirth: userDateOfBirth,
-                    description: userDescription,
-                    password: userPassword,
-                };
-                createNewUserInfo(dataToSend);
-                setIsRegistraionSuccess(true);
-                setLoading(false);
-            })
+        const signup = await register(userEmail, userPassword)
+        const dataToSend = {
+            userId: signup.uid,
+            name: userName,
+            nametolowcase: userName.toLowerCase(),
+            email: userEmail,
+            dateOfBirth: userDateOfBirth,
+            description: userDescription,
+            password: userPassword,
+        };
+        createNewUserInfo(dataToSend);
+        setIsRegistraionSuccess(true);
+        setLoading(false);
 
     };
 
@@ -116,179 +115,188 @@ const Register = (props) => {
                 </TouchableOpacity>
             </View>
         );
-    }
-    else if (loading) return <LoadingScreen/>
+    } else if (loading) return <LoadingScreen/>
     else return (
-        <View style={{flex: 1, backgroundColor: '#307ecc'}}>
-            <ScrollView
-                keyboardShouldPersistTaps="handled"
-                contentContainerStyle={{
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                }}>
-                <KeyboardAvoidingView enabled>
-                    <View style={styles.container}>
-                        <Text style={styles.title_text}>Name</Text>
-                        <View style={styles.SectionStyle}>
-                            <TextInput
-                                style={styles.inputStyle}
-                                onChangeText={(UserName) => setUserName(UserName)}
-                                underlineColorAndroid="#f000"
-                                placeholder="Enter Name"
-                                placeholderTextColor="#8b9cb5"
-                                autoCapitalize="sentences"
-                                returnKeyType="next"
-                                onSubmitEditing={() =>
-                                    emailInputRef.current && emailInputRef.current.focus()
-                                }
-                                blurOnSubmit={true}
-                            />
-                        </View>
-                        <Text style={styles.title_text}>Email</Text>
-                        <View style={styles.SectionStyle}>
-                            <TextInput
-                                style={styles.inputStyle}
-                                onChangeText={(UserEmail) => setUserEmail(UserEmail)}
-                                underlineColorAndroid="#f000"
-                                placeholder="Enter Email"
-                                placeholderTextColor="#8b9cb5"
-                                keyboardType="email-address"
-                                ref={emailInputRef}
-                                returnKeyType="next"
-                                onSubmitEditing={() =>
-                                    passwordInputRef.current &&
-                                    passwordInputRef.current.focus()
-                                }
-                                blurOnSubmit={false}
-                            />
-                        </View>
-                        <Text style={styles.title_text}>Password</Text>
-                        <View style={styles.SectionStyle}>
-                            <TextInput
-                                style={styles.inputStyle}
-                                onChangeText={(UserPassword) =>
-                                    setUserPassword(UserPassword)
-                                }
-                                underlineColorAndroid="#f000"
-                                placeholder="Enter Password"
-                                placeholderTextColor="#8b9cb5"
-                                ref={passwordInputRef}
-                                returnKeyType="next"
-                                secureTextEntry={showPassword}
-                                onSubmitEditing={() =>
-                                    confirmPasswordInputRef.current &&
-                                    confirmPasswordInputRef.current.focus()
-                                }
-                                blurOnSubmit={false}
-                            />
+            <View style={{flex: 1, backgroundColor: '#307ecc'}}>
+                <ScrollView
+                    keyboardShouldPersistTaps="handled"
+                    contentContainerStyle={{
+                        justifyContent: 'center',
+                        alignContent: 'center',
+                    }}>
+                    <KeyboardAvoidingView enabled>
+                        <View style={styles.container}>
+                            <Text style={styles.title_text}>Name</Text>
+                            <View style={styles.SectionStyle}>
+                                <TextInput
+                                    style={styles.inputStyle}
+                                    onChangeText={(UserName) => setUserName(UserName)}
+                                    underlineColorAndroid="#f000"
+                                    placeholder="Enter Name"
+                                    placeholderTextColor="#8b9cb5"
+                                    autoCapitalize="sentences"
+                                    returnKeyType="next"
+                                    onSubmitEditing={() =>
+                                        emailInputRef.current && emailInputRef.current.focus()
+                                    }
+                                    blurOnSubmit={true}
+                                />
+                            </View>
+                            <Text style={styles.title_text}>Email</Text>
+                            <View style={styles.SectionStyle}>
+                                <TextInput
+                                    style={styles.inputStyle}
+                                    onChangeText={(UserEmail) => setUserEmail(UserEmail)}
+                                    underlineColorAndroid="#f000"
+                                    placeholder="Enter Email"
+                                    placeholderTextColor="#8b9cb5"
+                                    keyboardType="email-address"
+                                    ref={emailInputRef}
+                                    returnKeyType="next"
+                                    onSubmitEditing={() =>
+                                        passwordInputRef.current &&
+                                        passwordInputRef.current.focus()
+                                    }
+                                    blurOnSubmit={false}
+                                />
+                            </View>
+                            <Text style={styles.title_text}>Password</Text>
+                            <View style={styles.SectionStyle}>
+                                <TextInput
+                                    style={styles.inputStyle}
+                                    onChangeText={(UserPassword) =>
+                                        setUserPassword(UserPassword)
+                                    }
+                                    underlineColorAndroid="#f000"
+                                    placeholder="Enter Password"
+                                    placeholderTextColor="#8b9cb5"
+                                    ref={passwordInputRef}
+                                    returnKeyType="next"
+                                    secureTextEntry={showPassword}
+                                    onSubmitEditing={() =>
+                                        confirmPasswordInputRef.current &&
+                                        confirmPasswordInputRef.current.focus()
+                                    }
+                                    blurOnSubmit={false}
+                                />
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setShowPassword(!showPassword)
+                                    }}
+                                >
+                                    {showPassword ?
+                                        <Feather
+                                            name="eye-off"
+                                            color='#dadae8'
+                                            size={20}
+                                        />
+                                        :
+                                        <Feather
+                                            name="eye"
+                                            color='#dadae8'
+                                            size={20}
+                                        />
+                                    }
+                                </TouchableOpacity>
+                            </View>
+                            <Text style={styles.title_text}>Confirm Password</Text>
+                            <View style={styles.SectionStyle}>
+                                <TextInput
+                                    style={styles.inputStyle}
+                                    onChangeText={(ConfirmUserPassword) =>
+                                        setConfirmPassword(ConfirmUserPassword)
+                                    }
+                                    underlineColorAndroid="#f000"
+                                    placeholder="Confirm Password"
+                                    placeholderTextColor="#8b9cb5"
+                                    ref={confirmPasswordInputRef}
+                                    returnKeyType="next"
+                                    secureTextEntry={showConfirmPassword}
+                                    onSubmitEditing={() =>
+                                        descriptionInputRef.current &&
+                                        descriptionInputRef.current.focus()
+                                    }
+                                    blurOnSubmit={false}
+                                />
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setShowConfirmPassword(!showConfirmPassword)
+                                    }}
+                                >
+                                    {showConfirmPassword ?
+                                        <Feather
+                                            name="eye-off"
+                                            color='#dadae8'
+                                            size={20}
+                                        />
+                                        :
+                                        <Feather
+                                            name="eye"
+                                            color='#dadae8'
+                                            size={20}
+                                        />
+                                    }
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.DateTimeContainer}>
+                                <Button title="Date Of Birth" onPress={() => setShowDatePicker(true)}/>
+                                <Text style={styles.date_text}>{(function () {
+                                    let dd = String(userDateOfBirth.getDate()).padStart(2, '0');
+                                    let mm = String(userDateOfBirth.getMonth() + 1).padStart(2, '0');
+                                    let yyyy = userDateOfBirth.getFullYear();
+
+                                    return dd + '/' + mm + '/' + yyyy;
+
+                                })()}</Text>
+                                <DatePicker
+                                    modal
+                                    open={showDatePicker}
+                                    date={userDateOfBirth}
+                                    mode="date"
+                                    onConfirm={(date) => {
+                                        setShowDatePicker(false)
+                                        setUserDateOfBirth(date)
+                                    }}
+                                    onCancel={() => {
+                                        setShowDatePicker(false)
+                                        setUserDateOfBirth(new Date())
+                                    }}
+                                />
+                            </View>
+                            <Text style={styles.title_text}>Description</Text>
+                            <View style={styles.SectionStyle}>
+                                <TextInput
+                                    style={styles.inputStyle}
+                                    onChangeText={(UserDescription) =>
+                                        setUserDescription(UserDescription)
+                                    }
+                                    underlineColorAndroid="#f000"
+                                    placeholder="Enter Description"
+                                    placeholderTextColor="#8b9cb5"
+                                    autoCapitalize="sentences"
+                                    ref={descriptionInputRef}
+                                    returnKeyType="next"
+                                    onSubmitEditing={Keyboard.dismiss}
+                                    blurOnSubmit={false}
+                                />
+                            </View>
                             <TouchableOpacity
-                                onPress={() => {setShowPassword(!showPassword)}}
-                            >
-                                {showPassword ?
-                                    <Feather
-                                        name="eye-off"
-                                        color='#dadae8'
-                                        size={20}
-                                    />
-                                    :
-                                    <Feather
-                                        name="eye"
-                                        color='#dadae8'
-                                        size={20}
-                                    />
-                                }
+                                style={styles.buttonStyle}
+                                activeOpacity={0.5}
+                                onPress={handleSubmitButton}>
+                                <Text style={styles.buttonTextStyle}>REGISTER</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.buttonStyle}
+                                activeOpacity={0.5}
+                                onPress={()=>{navigation.navigate('Login')}}>
+                                <Text style={styles.buttonTextStyle}>Login</Text>
                             </TouchableOpacity>
                         </View>
-                        <Text style={styles.title_text}>Confirm Password</Text>
-                        <View style={styles.SectionStyle}>
-                            <TextInput
-                                style={styles.inputStyle}
-                                onChangeText={(ConfirmUserPassword) =>
-                                    setConfirmPassword(ConfirmUserPassword)
-                                }
-                                underlineColorAndroid="#f000"
-                                placeholder="Confirm Password"
-                                placeholderTextColor="#8b9cb5"
-                                ref={confirmPasswordInputRef}
-                                returnKeyType="next"
-                                secureTextEntry={showConfirmPassword}
-                                onSubmitEditing={() =>
-                                    descriptionInputRef.current &&
-                                    descriptionInputRef.current.focus()
-                                }
-                                blurOnSubmit={false}
-                            />
-                            <TouchableOpacity
-                                onPress={() => {setShowConfirmPassword(!showConfirmPassword)}}
-                            >
-                                {showConfirmPassword ?
-                                    <Feather
-                                        name="eye-off"
-                                        color='#dadae8'
-                                        size={20}
-                                    />
-                                    :
-                                    <Feather
-                                        name="eye"
-                                        color='#dadae8'
-                                        size={20}
-                                    />
-                                }
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.DateTimeContainer}>
-                            <Button title="Date Of Birth" onPress={() => setShowDatePicker(true)} />
-                            <Text style={styles.date_text}>{(function() {
-                                let dd = String(userDateOfBirth.getDate()).padStart(2, '0');
-                                let mm = String(userDateOfBirth.getMonth() + 1).padStart(2, '0');
-                                let yyyy = userDateOfBirth.getFullYear();
-
-                                return dd + '/' + mm + '/' + yyyy;
-
-                            })()}</Text>
-                            <DatePicker
-                                modal
-                                open={showDatePicker}
-                                date={userDateOfBirth}
-                                mode="date"
-                                onConfirm={(date) => {
-                                    setShowDatePicker(false)
-                                    setUserDateOfBirth(date)
-                                }}
-                                onCancel={() => {
-                                    setShowDatePicker(false)
-                                    setUserDateOfBirth(new Date())
-                                }}
-                            />
-                        </View>
-                        <Text style={styles.title_text}>Description</Text>
-                        <View style={styles.SectionStyle}>
-                            <TextInput
-                                style={styles.inputStyle}
-                                onChangeText={(UserDescription) =>
-                                    setUserDescription(UserDescription)
-                                }
-                                underlineColorAndroid="#f000"
-                                placeholder="Enter Description"
-                                placeholderTextColor="#8b9cb5"
-                                autoCapitalize="sentences"
-                                ref={descriptionInputRef}
-                                returnKeyType="next"
-                                onSubmitEditing={Keyboard.dismiss}
-                                blurOnSubmit={false}
-                            />
-                        </View>
-                        <TouchableOpacity
-                            style={styles.buttonStyle}
-                            activeOpacity={0.5}
-                            onPress={handleSubmitButton}>
-                            <Text style={styles.buttonTextStyle}>REGISTER</Text>
-                        </TouchableOpacity>
-                    </View>
-                </KeyboardAvoidingView>
-            </ScrollView>
-        </View>
-    );
+                    </KeyboardAvoidingView>
+                </ScrollView>
+            </View>
+        );
 };
 export default Register;
 
@@ -333,8 +341,8 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         marginLeft: 35,
         marginRight: 35,
-        marginTop: 20,
-        marginBottom: 20,
+        marginTop: 10,
+        marginBottom: 0,
     },
     buttonTextStyle: {
         color: '#FFFFFF',

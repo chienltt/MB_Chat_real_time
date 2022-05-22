@@ -18,20 +18,19 @@ import {createNewRoomChat} from "../../../helpers/firebase/databases/WriteData";
 
 
 const ProfileScreen = ({navigation, route}) => {
-    console.log('okok1',route.params)
-    const {user, logout} = useContext(AppContext);
+    const {userInfo, user, logout} = useContext(AppContext);
 
     const [loading, setLoading] = useState(true);
     const [userData, setUserData] = useState(null);
     const [darkMode, setDarkMode] = useState(false);
 
-    const getUser = async() => {
+    const getUser = async () => {
         await firestore()
             .collection('Users')
-            .doc( route.params ? route.params.userId : "FOajGnNk8K4CiLGyk4Ik")
+            .doc(route.params.userId)
             .get()
             .then((documentSnapshot) => {
-                if( documentSnapshot.exists ) {
+                if (documentSnapshot.exists) {
                     console.log('User Data', documentSnapshot.data());
                     setUserData(documentSnapshot.data());
                 }
@@ -43,35 +42,50 @@ const ProfileScreen = ({navigation, route}) => {
         setLoading(!loading);
     }, []);
 
-    const onPressMessage = async ()=>{
-        const roomInfo = await checkRoomExistsByMembers(route.params.userId,user.uid)
-        if(roomInfo){
-            // navigation.navigate('ChatScreen', roomInfo)
-            console.log('okokcoroi',roomInfo)
+    const onPressMessage = async () => {
+        const roomInfo = await checkRoomExistsByMembers(route.params.userId, user.uid)
+        if (roomInfo.length) {
+            console.log('okokco roi',roomInfo)
+            navigation.navigate('ChatScreen', roomInfo[0])
+        } else {
+            const newRoom = {
+                name: {
+                    [user.uid]: route.params.name,
+                    [route.params.userId]: userInfo.name,
+                },
+                avatar: userData.avatar,
+                type: 'basic',
+                membersObject: {
+                    [user.uid]: true,
+                    [route.params.userId]: true,
+                },
+                members:[
+                    user.uid,
+                    route.params.userId
+                ]
+            }
+
+            const newRoomInfo = await createNewRoomChat(newRoom)
+            if (newRoomInfo) navigation.navigate('ChatScreen', newRoomInfo)
         }
-        // else {
-        //     const newRoom = {
-        //         name:userData.name,
-        //         avatar:userData.avatar,
-        //         type:'basic',
-        //         members:[user.uid,route.params.userId]
-        //     }
-        //     console.log('okokchayroi')
-        //     const newRoomInfo =await createNewRoomChat(newRoom)
-        //     if(newRoomInfo) navigation.navigate('ChatScreen', newRoomInfo)
-        // }
+    }
+
+    const onLogOut = ()=>{
+        logout()
     }
 
     return (
         <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-            <TouchableOpacity onPress={()=>navigation.goBack()}><Text>Back</Text></TouchableOpacity>
+
+
+            <TouchableOpacity onPress={() => navigation.goBack()}><Text>Back</Text></TouchableOpacity>
             <ScrollView
                 style={styles.container}
                 contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}
                 showsVerticalScrollIndicator={false}>
                 <Image
                     style={styles.userImg}
-                    source={(userData ?userData.avatar ? {uri: userData.avatar} : avatar : avatar)}
+                    source={(userData ? userData.avatar ? {uri: userData.avatar} : avatar : avatar)}
                 />
                 <Text style={styles.userName}>{userData ? userData.name || 'Test' : 'Test'}</Text>
                 {/* <Text>{route.params ? route.params.userId : user.uid}</Text> */}
@@ -79,12 +93,13 @@ const ProfileScreen = ({navigation, route}) => {
                     {userData ? userData.description || 'No details added.' : 'A lot of detail here'}
                 </Text>
                 <View style={styles.userBtnWrapper}>
-                    {route.params ? (
+                    {route.params.userId !== user.uid ? (
                         <>
                             <TouchableOpacity style={styles.userBtn} onPress={() => onPressMessage()}>
-                                <Text style={styles.userBtnTxt}>Message1</Text>
+                                <Text style={styles.userBtnTxt}>Message</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.userBtn} onPress={() => {}}>
+                            <TouchableOpacity style={styles.userBtn} onPress={() => {
+                            }}>
                                 <Text style={styles.userBtnTxt}>Follow</Text>
                             </TouchableOpacity>
                         </>
@@ -97,7 +112,7 @@ const ProfileScreen = ({navigation, route}) => {
                                 }}>
                                 <Text style={styles.userBtnTxt}>Edit</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.userBtn} onPress={() => console.log(user)}>
+                            <TouchableOpacity style={styles.userBtn} onPress={() => onLogOut()}>
                                 <Text style={styles.userBtnTxt}>Logout</Text>
                             </TouchableOpacity>
                         </>
@@ -123,26 +138,30 @@ const ProfileScreen = ({navigation, route}) => {
                 </View>
                 <TouchableOpacity
                     style={{width: '100%'}}
-                    onPress={() => { }}>
+                    onPress={() => {
+                    }}>
                     <View
                         style={styles.buttonView}>
                         <Text style={{fontSize: 17}}>Dark mode</Text>
                         <Switch
-                        style={{marginLeft: 'auto'}}
-                        value={darkMode}
-                        onValueChange={() => {setDarkMode(prevState => !prevState)}}/>
+                            style={{marginLeft: 'auto'}}
+                            value={darkMode}
+                            onValueChange={() => {
+                                setDarkMode(prevState => !prevState)
+                            }}/>
                     </View>
-                    <View style={{height: 3, backgroundColor: 'lightgrey'}} />
+                    <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
 
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{alignSelf: 'flex-start', width: '100%'}}
-                    onPress={() => { }}>
+                    onPress={() => {
+                    }}>
                     <View
                         style={styles.buttonView}>
-                        <Text style={{fontSize: 17, }}>Detail Information</Text>
+                        <Text style={{fontSize: 17,}}>Detail Information</Text>
                     </View>
-                    <View style={{height: 3, backgroundColor: 'lightgrey'}} />
+                    <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
 
                 </TouchableOpacity>
                 {/*<View style={{height: 3, backgroundColor: 'grey', width: '100%'}} />*/}

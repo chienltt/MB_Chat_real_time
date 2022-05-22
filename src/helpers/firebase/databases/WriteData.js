@@ -2,7 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 
 export const createNewUserInfo = (userInfo) => {
     firestore().collection('Users')
-        .doc(userInfo.userID)
+        .doc(userInfo.userId)
         .set({
             name: userInfo.name || null,
             age: userInfo.age || null,
@@ -15,18 +15,22 @@ export const createNewUserInfo = (userInfo) => {
     })
 }
 export const createNewRoomChat = (newRoom) => {
+    console.log("newRoom",newRoom.name)
+    console.log("newRoom",newRoom.avatar)
+    console.log("newRoom",newRoom.members)
+    console.log("newRoom",newRoom.type)
     const now = new Date();
     firestore().collection('Chatrooms')
         .add({
             name:newRoom.name,
             avatar:newRoom.avatar,
             members: newRoom.members,
-            lastMessage: null,
+            membersObject: newRoom.membersObject,
+            // lastMessage: null,
             updateTime:now,
             type:newRoom.type,
         }).then((room) => {
         console.log('create room chat: ', room.id)
-        console.log('okok',room)
         return room
     })
 }
