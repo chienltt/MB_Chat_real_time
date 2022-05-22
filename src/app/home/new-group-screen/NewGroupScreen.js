@@ -6,6 +6,7 @@ import UserList from "../search-screen/component/UserList";
 import Avatar from "../../../helpers/Avatar";
 import NewGroupButton from "./component/NewGroupButton";
 import UserListSelection from "./component/UserListSelection";
+import UserListSelected from "./component/UserListSelected";
 const NewGroupScreen = (props)=>{
     const {navigation} = props
     const [value,setValue] = useState('')
@@ -21,7 +22,7 @@ const NewGroupScreen = (props)=>{
             const _data = await searchUser(value)
             if(_data) {
                 _data.map(user => {
-                    const isSelected = dataSelected.find(userSelected => userSelected.id === user.id)
+                    const isSelected = dataSelected.find(userSelected => userSelected.userId === user.userId)
                     if (isSelected) user.selected = true
                     user.selected = false
                 })
@@ -35,9 +36,12 @@ const NewGroupScreen = (props)=>{
         // console.log('okok',newValueSearch)
     }
     const onUnSelectUser= async (user)=>{
-        const newDataSelected=dataSelected.map(_user=>{
-            if (_user!== user.id ) return _user
-        })
+        const newDataSelected=dataSelected.filter(userSelected=>userSelected.userId!== user.userId)
+        console.log('gia tri',newDataSelected)
+        // const index = dataSelected.filter((userSelected,index)=>{
+        //     if (userSelected.id === user.id) return index
+        // })
+        // if (index) setDataSelected(dataSelected.splice(index,1))
         setDataSelected(newDataSelected)
     }
     return (
@@ -57,6 +61,7 @@ const NewGroupScreen = (props)=>{
             </View>
             <View style={style.body}>
                 <NewGroupButton userSelected={dataSelected} />
+                <UserListSelected dataSelected ={dataSelected} />
                 <UserListSelection navigation={navigation} data={data} selectUser={onselectUser} unSelectUser={onUnSelectUser}/>
             </View>
         </View>

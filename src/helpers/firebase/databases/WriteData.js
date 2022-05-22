@@ -15,10 +15,6 @@ export const createNewUserInfo = (userInfo) => {
     })
 }
 export const createNewRoomChat = (newRoom) => {
-    console.log("newRoom", newRoom.name)
-    console.log("newRoom", newRoom.avatar)
-    console.log("newRoom", newRoom.members)
-    console.log("newRoom", newRoom.type)
     const now = new Date();
     firestore().collection('Chatrooms')
         .add({
@@ -29,6 +25,7 @@ export const createNewRoomChat = (newRoom) => {
             // lastMessage: null,
             updateTime: now,
             type: newRoom.type,
+            isChecked:[],
         }).then((room) => {
         console.log('create room chat: ', room.id)
         return room
