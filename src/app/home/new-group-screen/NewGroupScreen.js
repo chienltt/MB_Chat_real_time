@@ -8,10 +8,10 @@ import NewGroupButton from "./component/NewGroupButton";
 import UserListSelection from "./component/UserListSelection";
 import UserListSelected from "./component/UserListSelected";
 const NewGroupScreen = (props)=>{
-    const {navigation} = props
+    const {navigation,route} = props
     const [value,setValue] = useState('')
     const [data,setData] = useState([])
-    const [dataSelected,setDataSelected] = useState([])
+    const [dataSelected,setDataSelected] = useState(route.params?route.params.selectedUser:[])
     const onchangeSearchValue = async (value)=>{
         if(value==='') {
             setValue('')
@@ -33,17 +33,11 @@ const NewGroupScreen = (props)=>{
         }
     }
     const onselectUser = async (user)=>{
-        if(dataSelected.includes(user)===false)
-        setDataSelected((prev)=>[...prev,user])
-        // const newValueSearch = value.split(',')[0]
-        // console.log('okok',newValueSearch)
+        const isExist =dataSelected.find(_user=>_user.userId===user.userId)
+        if(!isExist)setDataSelected((prev)=>[...prev,user])
     }
     const onUnSelectUser= async (user)=>{
         const newDataSelected=dataSelected.filter(userSelected=>userSelected.userId!== user.userId)
-        // const index = dataSelected.filter((userSelected,index)=>{
-        //     if (userSelected.id === user.id) return index
-        // })
-        // if (index) setDataSelected(dataSelected.splice(index,1))
         setDataSelected(newDataSelected)
     }
     return (
@@ -63,7 +57,7 @@ const NewGroupScreen = (props)=>{
             </View>
             <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
             <View style={style.body}>
-                <NewGroupButton userSelected={dataSelected} navigation={navigation}/>
+                <NewGroupButton userSelected={dataSelected} navigation={navigation} roomId={route.params?route.params.roomId:null}/>
                 <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
                 <UserListSelected dataSelected ={dataSelected} unSelectUser={onUnSelectUser}/>
                 <UserListSelection navigation={navigation} data={data} selectUser={onselectUser} unSelectUser={onUnSelectUser}/>

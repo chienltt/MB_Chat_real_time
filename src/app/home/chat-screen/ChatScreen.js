@@ -8,6 +8,7 @@ import AppContext from "../../AppContext";
 import {getMessages, getMessagesRealtime} from "../../../helpers/firebase/databases/ReadData";
 import moment from "moment";
 import firestore from "@react-native-firebase/firestore";
+import GetUserInGroup from "./component/GetUserInGroup";
 
 const ChatScreen = (props) => {
     const {user} = useContext(AppContext)
@@ -33,11 +34,11 @@ const ChatScreen = (props) => {
         getListMessagesInit()
     }, [])
 
-    useEffect(()=>{
-        if(roomInfo.type==="basic")
-            if(roomInfo.status ==="block")
+    useEffect(() => {
+        if (roomInfo.type === "basic")
+            if (roomInfo.status === "block")
                 Alert.alert("you  can't message this person!")
-    },[])
+    }, [])
 
     useEffect(() => {
         // if (Object.keys(listMessages).length!==0) {
@@ -75,35 +76,38 @@ const ChatScreen = (props) => {
         if (messageRealtime) setListMessages((prev) => [...prev, messageRealtime])
     }, [messageRealtime])
 
-    // useEffect(() => {
-    //   const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-    //     setMessageShowSize(8)
-    //   });
-    //   const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-    //     setMessageShowSize(8)
-    //   });
-    //
-    //   return () => {
-    //     showSubscription.remove();
-    //     hideSubscription.remove();
-    //   };
-    // }, []);
+    const addUserToGroup = async () => {
+        const data = await GetUserInGroup(roomInfo)
+        navigation.navigate('NewGroupScreen', {
+            selectedUser: data,
+            mode: "update",
+            roomId: roomInfo.roomId
+        })
+    }
     return (
         <View style={style.container}>
-            <View style={style.header}>
+            <View style={style.header_wrap}>
                 {/*<View style={style.header_wrap}>*/}
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Icon size={25} style={style.icon_goback} name={'left'}/>
-                </TouchableOpacity>
-                <View><Avatar size={50} url={roomInfo.type === "basic" ? roomInfo.avatars[user.uid] : roomInfo.avatar}/></View>
-                <Text style={style.room_name}>{roomInfo.name[user.uid]} </Text>
-                {/*</View>*/}
+                <View style={style.header_left}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Icon size={25} style={style.icon_goback} name={'left'}/>
+                    </TouchableOpacity>
+                    <View><Avatar size={50}
+                                  url={roomInfo.type === "basic" ? roomInfo.avatars[user.uid] : roomInfo.avatar}/></View>
+                    <Text style={style.room_name}>{roomInfo.name[user.uid]} </Text>
+                    {/*</View>*/}
+                </View>
+                {roomInfo.type === "group" ? <TouchableOpacity onPress={() => addUserToGroup()}>
+                    <Icon size={27} style={style.header_update_group} name={'adduser'}/>
+                </TouchableOpacity> : <View/>}
             </View>
+
             <View style={[style.message_show]}>
                 <MessageShow navigation={navigation} listMessages={listMessages} setListMessages={setListMessages}
                              roomInfo={roomInfo}/>
             </View>
-            {roomInfo.type === 'basic' ? roomInfo.status === "active"? <CreateMessage roomInfo={roomInfo}/>: <View/>:<CreateMessage roomInfo={roomInfo}/>}
+            {roomInfo.type === 'basic' ? roomInfo.status === "active" ? <CreateMessage roomInfo={roomInfo}/> : <View/> :
+                <CreateMessage roomInfo={roomInfo}/>}
         </View>
     )
 }
@@ -113,24 +117,30 @@ const style = StyleSheet.create({
         minHeight: '100%',
         backgroundColor: '#fff'
     },
-    header: {
+    header_wrap: {
         flex: 1,
         flexDirection: 'row',
         alignItems: "center",
         height: 20,
         minHeight: 10,
         backgroundColor: '#2E8C2E',
+        justifyContent:"space-between",
+        paddingRight:20
     },
-    header_wrap: {
-        height: '100%',
-        width: '100%',
+    header_left: {
+        // flex: 1,
         flexDirection: 'row',
         alignItems: "center",
-        // height:20,
-        minHeight: 60,
-        paddingHorizontal: 5,
-        backgroundColor: '#2E8C2E',
+        // height: 20,
+        // minHeight: 10,
+        // backgroundColor: '#2E8C2E',
     },
+    header_update_group: {
+
+        fontWeight: "800",
+        color: "#fff"
+    }
+    ,
     message_show: {
         flex: 8,
     },

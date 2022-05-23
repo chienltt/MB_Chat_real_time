@@ -35,7 +35,6 @@ export const getMessages = async (roomID) => {
 export const getRoomChatsById = async (RoomID) => {
     let roomData = await firestore().collection("Chatrooms").doc(RoomID)
         .get()
-    console.log('roomdata',roomData.id)
     return {
         ...roomData._data,
         roomId:roomData.id
@@ -79,7 +78,10 @@ export const getUserById = async (id) => {
     let data = await firestore().collection("Users")
         .doc(id)
         .get()
-    return data._data;
+    return {
+        ...data._data,
+        userId:data.id
+    }
 }
 
 export const searchUser = async (searchValue) => {

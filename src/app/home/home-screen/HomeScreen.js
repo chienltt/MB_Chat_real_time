@@ -75,7 +75,7 @@ const HomeScreen = (props) => {
 const style = StyleSheet.create({
     wrap: {
         flex: 1,
-        backgroundColor: GetUserView().background,
+        backgroundColor: "#fff",
     },
     top: {
         flex: 1,

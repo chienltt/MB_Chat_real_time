@@ -42,6 +42,7 @@ export const createNewGroup = async (newGroup) => {
         .add({
             name: newGroup.name,
             avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0uOCz8P-VYPNKEVkFEC1lVnz_t42LtOrLeg&usqp=CAU",
+            avatars:newGroup.avatars,
             members: newGroup.members,
             // membersObject: newGroup.membersObject,
             // lastMessage: null,
@@ -53,6 +54,18 @@ export const createNewGroup = async (newGroup) => {
             return room
         })
     return newRoom
+}
+
+export const updateRoomInfo =async (roomData,roomId)=>{
+    const success = await firestore().collection('Chatrooms').doc(roomId).update({
+        members: roomData.members,
+        avatars:roomData.avatars,
+        name:roomData.name
+    }).then(()=>{
+        Alert.alert("Update group successfully!")
+        return true
+    })
+    return success
 }
 
 export const checkSeen = (roomInfo, userId, getRoomList) => {

@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, {useContext, useState} from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
 import Avatar from "../../../../helpers/Avatar";
 import Video from "react-native-video";
 import VideoShow from "./VideoShow";
+import AppContext from "../../../AppContext";
 
 const Message = (props) => {
+  const {user} = useContext(AppContext)
   const [timeVisible, setTimeVisible] = useState(false);
   const { messageInfo, roomInfo,navigation } = props;
+  let otherId
+  for (const _user of roomInfo.members){
+    if(_user!== user.uid) otherId = _user
+  }
   return (
     messageInfo.quickUpdated === true ?
       <View></View> :
       <View style={messageInfo.isOwn === false ? style.wrap_notOwn : style.wrap_Own}>
-        <Avatar size={40} url={roomInfo.avatar} />
+        <Avatar size={40} url={roomInfo.type==="group"?roomInfo.avatars[messageInfo.user]:messageInfo.isOwn === false ?roomInfo.avatars[user.uid]:roomInfo.avatars[otherId]} />
         {
           messageInfo.type === "text" ?
             <TouchableOpacity style={style.text_message_wrap} onPress={() => {

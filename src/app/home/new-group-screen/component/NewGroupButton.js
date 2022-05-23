@@ -4,58 +4,81 @@ import Avatar from '../../../../helpers/Avatar';
 import avatar from '../../home-screen/image/avatar.png'
 // import AntDesign from "react-native-vector-icons/AntDesign";
 import Icon from 'react-native-vector-icons/AntDesign'
-import {createNewGroup} from "../../../../helpers/firebase/databases/WriteData";
+import {createNewGroup, updateRoomInfo} from "../../../../helpers/firebase/databases/WriteData";
 import AppContext from "../../../AppContext";
 import {getRoomChatsById} from "../../../../helpers/firebase/databases/ReadData";
+
 const NewGroupButton = (props) => {
-    const {userSelected,navigation} = props
-    const {userInfo} =useContext(AppContext)
-    if(userSelected.includes(userInfo)===false) userSelected.push(userInfo)
-    const setNameGroupEachUser = (user)=>{
-        let nameGroup=""
-        userSelected.forEach((_user)=>{
-            if(_user.userId !== user.userId) {
-                nameGroup = nameGroup+_user.name+","
+    const {userSelected, navigation, roomId} = props
+    const {userInfo} = useContext(AppContext)
+    const isExist = userSelected.find(_user => _user.userId === userInfo.userId)
+    if (!isExist) userSelected.push(userInfo)
+    const setNameGroupEachUser = (user) => {
+        let nameGroup = ""
+        userSelected.forEach((_user) => {
+            if (_user.userId !== user.userId) {
+                nameGroup = nameGroup + _user.name + ","
             }
         })
-        return nameGroup.slice(0,-1)
+        return nameGroup.slice(0, -1)
     }
-    const setNameGroup = ()=>{
-        let nameGroup={}
-        userSelected.forEach((_user)=>{
-            nameGroup[_user.userId]= setNameGroupEachUser(_user)
+    const setNameGroup = () => {
+        let nameGroup = {}
+        userSelected.forEach((_user) => {
+            nameGroup[_user.userId] = setNameGroupEachUser(_user)
         })
         return nameGroup
     }
-    const setMembersGroup = ()=>{
+    const setMembersGroup = () => {
         let members = []
-        userSelected.forEach((_user)=>{
+        userSelected.forEach((_user) => {
             members.push(_user.userId)
         })
         return members
     }
-    const onPressCreateNewGroup =async ()=>{
-        const newGroupData ={
-            name:setNameGroup(),
-            type:'group',
-            members:setMembersGroup()
+    const setAvatarsGroup = () => {
+        let avatars = {}
+        userSelected.forEach((_user) => {
+            avatars[_user.userId] = _user.avatar
+        })
+        return avatars
+    }
+    const onPressCreateNewGroup = async () => {
+        const newGroupData = {
+            name: setNameGroup(),
+            type: 'group',
+            members: setMembersGroup(),
+            avatars: setAvatarsGroup(),
         }
         const newGroupStatus = await createNewGroup(newGroupData)
-        if(newGroupStatus) {
-            console.log('okok',newGroupStatus.id)
+        if (newGroupStatus) {
             const newGroup = await getRoomChatsById(newGroupStatus.id)
             if (newGroup) navigation.navigate('ChatScreen', newGroup)
         }
     }
+    const onPressUpdateGroup = async () => {
+        const newGroupData = {
+            name: setNameGroup(),
+            members: setMembersGroup(),
+            avatars: setAvatarsGroup(),
+        }
+        await updateRoomInfo(newGroupData,roomId)
+        // if(groupStatus) {
+        //     const newGroup = await getRoomChatsById(newGroupStatus.id)
+        //     if (newGroup) navigation.navigate('ChatScreen', newGroup)
+        // }
+    }
     return (
-        <TouchableOpacity style={style.wrap_box} onPress={()=>onPressCreateNewGroup()}>
+        <TouchableOpacity style={style.wrap_box} onPress={() =>!roomId ? onPressCreateNewGroup():onPressUpdateGroup()}>
             <View style={style.wrap}>
                 <View style={style.avatar}>
-                    <Avatar size={60} url={"https://static.vecteezy.com/system/resources/thumbnails/000/550/535/small/user_icon_007.jpg"} />
+                    <Avatar size={60}
+                            url={"https://static.vecteezy.com/system/resources/thumbnails/000/550/535/small/user_icon_007.jpg"}/>
                 </View>
                 <View style={style.info_wrap}>
                     <View style={style.info}>
-                        <Text numberOfLines={1} style={style.name}>Create new group</Text>
+                        {!roomId ? <Text numberOfLines={1} style={style.name}>Create new group</Text> :
+                            <Text numberOfLines={1} style={style.name}>Update group</Text>}
                     </View>
                     <Icon size={16} name={'right'}/>
                 </View>
@@ -83,25 +106,25 @@ const style = StyleSheet.create({
     info_wrap: {
         flex: 5,
         // backgroundColor:"#75FF33",
-        justifyContent:'space-between',
-        flexDirection:'row',
-        alignItems:"center",
-        fontSize:20,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: "center",
+        fontSize: 20,
     },
-    info:{
-        paddingVertical:5,
-        marginLeft:10,
-        flex:1,
-        justifyContent:'center'
+    info: {
+        paddingVertical: 5,
+        marginLeft: 10,
+        flex: 1,
+        justifyContent: 'center'
     },
-    message:{
-        fontSize:18,
-        color:'#000000'
+    message: {
+        fontSize: 18,
+        color: '#000000'
     },
-    name:{
-        fontSize:23,
-        fontWeight:"700",
-        color:'#000000'
+    name: {
+        fontSize: 23,
+        fontWeight: "700",
+        color: '#000000'
     }
 });
 
