@@ -15,7 +15,6 @@ import Avatar from "../../../helpers/Avatar";
 const HomeScreen = (props) => {
     const {navigation} = props
     const {user,userInfo,setUserInfo} = useContext(AppContext)
-    console.log('home', userInfo)
     const checkAndSetUserInfo = async ()=> {
         if ((!userInfo)||(userInfo.userId!==user.uid)) {
             const _userInfo = await getUserById(user.uid)
@@ -37,9 +36,11 @@ const HomeScreen = (props) => {
                     <TouchableOpacity style={style.touchable} onPress={()=>{
                         navigation.navigate("ProfileScreen",userInfo)
                     }}>
-                        {userInfo.avatar !== null ?
+                        {userInfo? userInfo.avatar ?
                             <Avatar size={30} url={userInfo.avatar} />
-                            : <Icon style={style.topHeaderElement} name={'user'}/>}
+                            : <Icon style={style.topHeaderElement} name={'user'}/>
+                            : <Icon style={style.topHeaderElement} name={'user'}/>
+                        }
                         {/*<Icon style={style.topHeaderElement} name={'user'}/>*/}
                     </TouchableOpacity>
                     <View>

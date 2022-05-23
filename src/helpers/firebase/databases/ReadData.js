@@ -106,3 +106,17 @@ export const searchUser = async (searchValue) => {
         });
     return data;
 }
+export const getAllUsers = async() =>{
+    const snapshot =await firestore().collection("Users")
+        // .where("name", "array-contains",searchValue)
+        .orderBy("name", "asc")
+        .get()
+    const data = snapshot.docs.map(doc => {
+        return{
+            ...doc.data(),
+            userId:doc.id,
+        }
+    });
+    return data
+}
+

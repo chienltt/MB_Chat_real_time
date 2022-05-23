@@ -89,7 +89,7 @@ const ChatScreen = (props) => {
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Icon size={25} style={style.icon_goback} name={'left'}/>
                 </TouchableOpacity>
-                <View><Avatar size={50} url={roomInfo.avatars[user.uid]}/></View>
+                <View><Avatar size={50} url={roomInfo.type === "basic" ? roomInfo.avatars[user.uid] : roomInfo.avatar}/></View>
                 <Text style={style.room_name}>{roomInfo.name[user.uid]} </Text>
                 {/*</View>*/}
             </View>

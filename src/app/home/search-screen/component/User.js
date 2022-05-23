@@ -8,6 +8,7 @@ const User = (props) => {
 
     return (
         <TouchableOpacity style={style.wrap_box} onPress={()=>{
+            console.log('userinfo',userInfo)
             navigation.navigate('ProfileScreen', userInfo)
         }}>
             <View style={style.wrap}>

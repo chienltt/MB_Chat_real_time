@@ -5,26 +5,29 @@ import AppContext from "../../../AppContext";
 import {checkSeen} from "../../../../helpers/firebase/databases/WriteData";
 
 const Room = (props) => {
-    const {user,setIsChangeRoomList} = useContext(AppContext)
-    const {navigation,getRoomList} = props
+    const {user, setIsChangeRoomList} = useContext(AppContext)
+    const {navigation, getRoomList} = props
     const roomInfo = props.roomInfo;
-    console.log('checked',roomInfo.isChecked.includes(user.uid))
+    console.log('checked', roomInfo.isChecked.includes(user.uid))
     return (
         <TouchableOpacity style={style.wrap_box} onPress={() => {
             setIsChangeRoomList(true)
-            checkSeen(roomInfo,user.uid,getRoomList)
+            checkSeen(roomInfo, user.uid, getRoomList)
             navigation.navigate('ChatScreen', roomInfo)
         }}>
             <View style={style.wrap}>
                 <View style={style.avatar}>
-                    <Avatar size={60} url={roomInfo.avatars[user.uid]}/>
+                    <Avatar size={60} url={roomInfo.type === "basic" ? roomInfo.avatars[user.uid] : roomInfo.avatar}/>
                 </View>
                 <View style={style.info_wrap}>
                     <View style={style.info}>
                         <Text numberOfLines={1} style={style.name}>{roomInfo.name[user.uid]}</Text>
                         {roomInfo.lastMessage ? roomInfo.lastMessage.type === 'text' ?
-                            <Text numberOfLines={1} style={roomInfo.isChecked.includes(user.uid)===true?style.message:style.message_bold}>{roomInfo.lastMessage.content}</Text> :
-                            <Text numberOfLines={1} style={roomInfo.isChecked.includes(user.uid)===true?style.message:style.message_bold}>send a file</Text> : <Text>empty</Text>}
+                            <Text numberOfLines={1}
+                                  style={roomInfo.isChecked.includes(user.uid) === true ? style.message : style.message_bold}>{roomInfo.lastMessage.content}</Text> :
+                            <Text numberOfLines={1}
+                                  style={roomInfo.isChecked.includes(user.uid) === true ? style.message : style.message_bold}>send
+                                a file</Text> : <Text>empty</Text>}
                     </View>
                 </View>
             </View>
@@ -63,10 +66,10 @@ const style = StyleSheet.create({
         fontSize: 18,
         color: '#666'
     },
-    message_bold:{
+    message_bold: {
         fontSize: 18,
         color: '#000000',
-        fontWeight:"700",
+        fontWeight: "700",
     },
     name: {
         fontSize: 20,
