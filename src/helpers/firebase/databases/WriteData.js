@@ -7,10 +7,11 @@ export const createNewUserInfo = (userInfo) => {
         .doc(userInfo.userId)
         .set({
             name: userInfo.name || null,
+            nametolowercase:userInfo.name.toLowerCase(),
             age: userInfo.age || null,
-            dateOfBirth: userInfo.dateOfBirth || null,
-            description: firestore.Timestamp.fromDate(userInfo.description) || null,
-            avatar: userInfo.avatar || "https://png2.cleanpng.com/sh/c19eebe8d9f5306b216767f15eff595b/L0KzQYm3VsI0N6t1hJH0aYP2gLBuTfNwdaF6jNd7LXnmf7B6TfF3aaVmip98b3Pscb20jfVlcZIyet54Zz3pf7B7TfF4baR0RdNBYYTkgn7wgB9vNWZnStcEOXO3RIGCVsI0NmU7TKUEMUi0QYa5Wcc5OGc8TqQBNEaxgLBu/kisspng-computer-icons-avatar-social-media-blog-font-aweso-avatar-icon-5b2e99c4409623.4643918115297806762646.png", // link to the address image of firebase storage
+            dateOfBirth: firestore.Timestamp.fromDate(userInfo.dateOfBirth ) || null,
+            description: userInfo.description || null,
+            avatar: userInfo.avatar || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsuEfNGH1bfcVOzDh1zx9-fq4omUbRgX5gTw&usqp=CAU", // link to the address image of firebase storage
             ChatRoomLists: [],
             blockList: [],
         }).then(() => {
@@ -30,6 +31,7 @@ export const createNewRoomChat = (newRoom) => {
             updateTime: now,
             type: newRoom.type,
             isChecked: [],
+            status:"active"
         }).then((room) => {
         console.log('create room chat: ', room.id)
         return room
