@@ -14,16 +14,17 @@ import firestore from '@react-native-firebase/firestore';
 // import PostCard from '../components/PostCard';
 import AppContext from "../../AppContext";
 import {checkRoomExistsByMembers} from "../../../helpers/firebase/databases/ReadData";
-import {createNewRoomChat} from "../../../helpers/firebase/databases/WriteData";
+import {blockRoomId, createNewRoomChat, unBlockRoomId} from "../../../helpers/firebase/databases/WriteData";
 import Icon from "react-native-vector-icons/AntDesign";
 
 
 const ProfileScreen = ({navigation, route}) => {
-    const {userInfo, user, logout} = useContext(AppContext);
+    const {userInfo, user, logout, setThisUserData} = useContext(AppContext);
 
     const [loading, setLoading] = useState(true);
     const [userData, setUserData] = useState(null);
     const [darkMode, setDarkMode] = useState(false);
+    const [thisUserInfo, setThisUserInfo] = useState(userInfo)
 
     const getUser = async () => {
         await firestore()
@@ -32,10 +33,9 @@ const ProfileScreen = ({navigation, route}) => {
             .get()
             .then((documentSnapshot) => {
                 if (documentSnapshot.exists) {
-                    console.log('User Data', documentSnapshot.data());
                     setUserData({
                         ...documentSnapshot.data(),
-                        userId:route.params.userId
+                        userId: route.params.userId
                     });
                 }
             })
@@ -54,37 +54,58 @@ const ProfileScreen = ({navigation, route}) => {
             const newRoom = {
                 name: {
                     [user.uid]: route.params.name,
-                    [route.params.userId]: userInfo.name,
+                    [route.params.userId]: thisUserInfo.name,
                 },
                 avatar: userData.avatar,
-                avatars:{
+                avatars: {
                     [user.uid]: userData.avatar,
-                    [route.params.userId]: userInfo.avatar,
+                    [route.params.userId]: thisUserInfo.avatar,
                 },
                 type: 'basic',
                 membersObject: {
                     [user.uid]: true,
                     [route.params.userId]: true,
                 },
-                members:[
+                members: [
                     user.uid,
                     route.params.userId
                 ]
             }
 
             const newRoomInfo = await createNewRoomChat(newRoom)
-            console.log('day nay',newRoomInfo)
+            console.log('day nay', newRoomInfo)
             if (newRoomInfo) navigation.navigate('ChatScreen', newRoomInfo)
         }
     }
 
-    const onLogOut = ()=>{
+    const onPressBlock = async () => {
+        setLoading(true)
+        if (thisUserInfo.blockList.includes(route.params.userId) === false) {
+            const success = await blockRoomId(route.params.userId, user.uid, thisUserInfo.blockList)
+            if (success) {
+                console.log('success', success)
+                await setThisUserData()
+            }
+        } else {
+            const success = await unBlockRoomId(route.params.userId, user.uid, thisUserInfo.blockList)
+            if (success) {
+                console.log('success', success)
+                await setThisUserData()
+            }
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        setThisUserInfo(userInfo)
+    }, [userInfo])
+
+    const onLogOut = () => {
         logout()
     }
 
     return (
         <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Icon size={25} style={styles.icon_goback} name={'left'}/>
@@ -110,9 +131,10 @@ const ProfileScreen = ({navigation, route}) => {
                             <TouchableOpacity style={styles.userBtn} onPress={() => onPressMessage()}>
                                 <Text style={styles.userBtnTxt}>Message</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.userBtn} onPress={() => {
-                            }}>
-                                <Text style={styles.userBtnTxt}>Follow</Text>
+                            <TouchableOpacity style={styles.userBtn} onPress={() => onPressBlock()}>
+                                {thisUserInfo.blockList.includes(route.params.userId) ?
+                                    <Text style={styles.userBtnTxt}>Unblock</Text> :
+                                    <Text style={styles.userBtnTxt}>Block</Text>}
                             </TouchableOpacity>
                         </>
                     ) : (
@@ -133,37 +155,39 @@ const ProfileScreen = ({navigation, route}) => {
                         </>
                     )}
                 </View>
-                <View style={styles.devider}>
-                    <Text style={styles.settingText}>Settings</Text>
-                </View>
-                <TouchableOpacity
-                    style={{width: '100%'}}
-                    onPress={() => {
-                    }}>
-                    <View
-                        style={styles.buttonView}>
-                        <Text style={{fontSize: 17}}>Dark mode</Text>
-                        <Switch
-                            style={{marginLeft: 'auto'}}
-                            value={darkMode}
-                            onValueChange={() => {
-                                setDarkMode(prevState => !prevState)
-                            }}/>
-                    </View>
-                    <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
+                {route.params.userId === user.uid ?
+                    <View style={styles.userSettingWrapper}>
+                        <View style={styles.devider}>
+                            <Text style={styles.settingText}>Settings</Text>
+                        </View>
+                        <TouchableOpacity
+                            style={{width: '100%'}}
+                            onPress={() => {
+                            }}>
+                            <View
+                                style={styles.buttonView}>
+                                <Text style={{fontSize: 17}}>Dark mode</Text>
+                                <Switch
+                                    style={{marginLeft: 'auto'}}
+                                    value={darkMode}
+                                    onValueChange={() => {
+                                        setDarkMode(prevState => !prevState)
+                                    }}/>
+                            </View>
+                            <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
 
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={{alignSelf: 'flex-start', width: '100%'}}
-                    onPress={() => {
-                    }}>
-                    <View
-                        style={styles.buttonView}>
-                        <Text style={{fontSize: 17,}}>Detail Information</Text>
-                    </View>
-                    <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
-
-                </TouchableOpacity>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={{alignSelf: 'flex-start', width: '100%'}}
+                            onPress={() => {
+                            }}>
+                            <View
+                                style={styles.buttonView}>
+                                <Text style={{fontSize: 17,}}>List block</Text>
+                            </View>
+                            <View style={{height: 3, backgroundColor: 'lightgrey'}}/>
+                        </TouchableOpacity>
+                    </View> : <View/>}
                 {/*<View style={{height: 3, backgroundColor: 'grey', width: '100%'}} />*/}
 
             </ScrollView>
@@ -199,6 +223,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 10,
     },
+    userSettingWrapper: {
+        width: '100%',
+    }
+    ,
     userBtnWrapper: {
         flexDirection: 'row',
         justifyContent: 'center',

@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Text, View, StyleSheet, Button, TouchableOpacity, ScrollView, Keyboard} from "react-native";
+import {Text, View, StyleSheet, Button, TouchableOpacity, ScrollView, Keyboard, Alert} from "react-native";
 import Avatar from "../../../helpers/Avatar";
 import Icon from 'react-native-vector-icons/AntDesign'
 import MessageShow from "./component/MessageShow";
@@ -32,6 +32,12 @@ const ChatScreen = (props) => {
         }
         getListMessagesInit()
     }, [])
+
+    useEffect(()=>{
+        if(roomInfo.type==="basic")
+            if(roomInfo.status ==="block")
+                Alert.alert("you  can't message this person!")
+    },[])
 
     useEffect(() => {
         // if (Object.keys(listMessages).length!==0) {
@@ -97,7 +103,7 @@ const ChatScreen = (props) => {
                 <MessageShow navigation={navigation} listMessages={listMessages} setListMessages={setListMessages}
                              roomInfo={roomInfo}/>
             </View>
-            <CreateMessage roomInfo={roomInfo}/>
+            {roomInfo.type === 'basic' ? roomInfo.status === "active"? <CreateMessage roomInfo={roomInfo}/>: <View/>:<CreateMessage roomInfo={roomInfo}/>}
         </View>
     )
 }

@@ -58,7 +58,6 @@ export const getListUserRoomChats = async (userId) => {
 };
 
 export const checkRoomExistsByMembers = async (otherId, userId) => {
-    console.log("data", userId, otherId)
     let room = []
     await firestore().collection("Chatrooms")
         .where("type", "==", "basic")
@@ -71,7 +70,6 @@ export const checkRoomExistsByMembers = async (otherId, userId) => {
                     ...doc.data(),
                     roomId: doc.id
                 });
-                console.log('okvcl', room)
             });
         });
     return room

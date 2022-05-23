@@ -11,19 +11,21 @@ import RoomLists from "./component/RoomLists";
 import {getUserById} from "../../../helpers/firebase/databases/ReadData";
 import searchScreen from "../search-screen/SearchScreen";
 import Avatar from "../../../helpers/Avatar";
+import GetUserView from "../../../helpers/GetUserView";
 
 const HomeScreen = (props) => {
     const {navigation} = props
-    const {user,userInfo,setUserInfo} = useContext(AppContext)
+    const {user,userInfo,setThisUserData} = useContext(AppContext)
     const checkAndSetUserInfo = async ()=> {
         if ((!userInfo)||(userInfo.userId!==user.uid)) {
-            const _userInfo = await getUserById(user.uid)
-            if (_userInfo) {
-                setUserInfo({
-                    ..._userInfo,
-                    userId:user.uid
-                })
-            }
+            // const _userInfo = await getUserById(user.uid)
+            // if (_userInfo) {
+            //     setUserInfo({
+            //         ..._userInfo,
+            //         userId:user.uid
+            //     })
+            // }
+            await setThisUserData()
         }
     }
     useEffect(()=>{
@@ -73,7 +75,7 @@ const HomeScreen = (props) => {
 const style = StyleSheet.create({
     wrap: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: GetUserView().background,
     },
     top: {
         flex: 1,

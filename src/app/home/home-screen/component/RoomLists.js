@@ -7,7 +7,7 @@ import firestore from "@react-native-firebase/firestore";
 
 const RoomLists = (props) => {
     const {navigation} = props
-    const {user,isChangeRoomList,setIsChangeRoomList} = useContext(AppContext)
+    const {user,userInfo} = useContext(AppContext)
     const [roomList, setRoomList] = useState([])
     const getUserRoomList = async () => {
         // if(isChangeRoomList===true) {
@@ -18,7 +18,7 @@ const RoomLists = (props) => {
     }
     useEffect(()=>{
         getUserRoomList()
-    },[])
+    },[userInfo])
 
     useEffect(() => {
         const getRoomListRealTime = async ()=>{
